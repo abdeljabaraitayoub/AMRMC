@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMedicsRequest;
 use App\Http\Requests\UpdateMedicsRequest;
 use App\Models\Medics;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MedicsController extends Controller
 {
@@ -17,51 +19,49 @@ class MedicsController extends Controller
         return $medics;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreMedicsRequest $request)
     {
-        //
+        $file = $request->file('image');
+        $name = $request->name;
+        // $filePath =  $file->getClientOriginalName();
+        Storage::disk('medics')->put($name, file_get_contents($file));
+        $url = Storage::disk('medics')->url($name);
+        $medics = Medics::create($request->all());
+        // return  response()->json($medics, 201);
+        return response()->json(['url' => $url, 'medics' => $medics], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Medics $medics)
+    public function show($id)
     {
-        //
+        $medics = Medics::findOrFail($id);
+        return $medics;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Medics $medics)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicsRequest $request, Medics $medics)
+    public function update(UpdateMedicsRequest $request, $id)
     {
-        //
+        $medics = Medics::findOrFail($id);
+        $medics->update($request->all());
+        return response()->json($medics, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Medics $medics)
+    public function destroy($id)
     {
-        //
+        $medics = Medics::findOrFail($id);
+        $medics->delete();
+        return response()->json(['message' => 'Medics deleted successfully'], 200);
     }
 }

@@ -10,4 +10,12 @@ class Medics extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    protected $fillable = [
+        'name',
+        'type',
+        'dosage_form',
+        'manufacturer',
+        'price',
+        'description',
+    ];
 }

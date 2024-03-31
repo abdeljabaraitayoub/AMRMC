@@ -37,3 +37,5 @@ Route::apiResource('activities', 'App\Http\Controllers\ActivityLogController');
 
 Route::apiResource('diseases', 'App\Http\Controllers\DiseaseController');
 Route::apiResource('patients', 'App\Http\Controllers\PatientController');
+
+Route::apiResource('medics', 'App\Http\Controllers\MedicsController');
