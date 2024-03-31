@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class AssociationAgent extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'id',
+        'association_id',
+        'position',
+        'bio'
+    ];
 }

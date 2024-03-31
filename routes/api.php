@@ -31,3 +31,9 @@ Route::group([
 
 
 Route::apiResource('associations', 'App\Http\Controllers\AssociationController');
+Route::apiResource('agents', 'App\Http\Controllers\AssociationAgentController');
+Route::apiResource('users', 'App\Http\Controllers\UserController');
+Route::apiResource('activities', 'App\Http\Controllers\ActivityLogController');
+
+Route::apiResource('diseases', 'App\Http\Controllers\DiseaseController');
+Route::apiResource('patients', 'App\Http\Controllers\PatientController');

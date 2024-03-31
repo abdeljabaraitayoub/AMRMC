@@ -17,7 +17,16 @@ class AssociationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->company,
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->unique()->phoneNumber,
+            'address' => $this->faker->optional()->address,
+            'city' => $this->faker->city,
+            'country' => 'Morocco', // default value
+            'website' => $this->faker->optional()->url,
+            'description' => $this->faker->optional()->text,
+            'objectives' => $this->faker->optional()->text,
+            'activities' => $this->faker->optional()->text,
         ];
     }
 }

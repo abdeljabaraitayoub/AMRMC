@@ -23,8 +23,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('objectives')->nullable();
             $table->text('activities')->nullable();
-            $table->date('deleted_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

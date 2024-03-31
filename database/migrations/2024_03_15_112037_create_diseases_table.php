@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('symptoms')->nullable();
             $table->text('causes')->nullable();
             $table->text('treatment')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

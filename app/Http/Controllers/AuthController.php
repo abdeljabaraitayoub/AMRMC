@@ -32,12 +32,7 @@ class AuthController extends Controller
         $user->save();
 
         // dd(Auth::user());
-        activity('created_user')
-            ->performedOn($user)
-            ->causedBy(Auth::user())
-            ->withProperties(['custom' => 'property'])
-            ->log('Look, I logged something');
-        return $this->login($request);
+
     }
 
 

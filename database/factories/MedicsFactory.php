@@ -17,7 +17,12 @@ class MedicsFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->word,
+            'type' => $this->faker->word,
+            'dosage_form' => $this->faker->randomElement(['tablet', 'capsule', 'liquid']),
+            'manufacturer' => $this->faker->company,
+            'price' => $this->faker->randomFloat(2, 0, 1000),
+            'description' => $this->faker->optional()->text,
         ];
     }
 }

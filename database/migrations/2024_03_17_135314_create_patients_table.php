@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id'); // Use the same type as the 'users' id column
+            $table->primary('id'); // Set 'id' as the primary key
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->string('medical_record_number')->unique();
             $table->text('medical_history')->nullable();
             $table->foreignId('association_id')->nullable()->constrained('associations')->onDelete('cascade');
-            $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('disease_id')->nullable()->constrained('diseases')->onDelete('cascade');
         });
     }

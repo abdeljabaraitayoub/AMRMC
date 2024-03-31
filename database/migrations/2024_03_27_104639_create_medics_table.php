@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('manufacturer');
             $table->decimal('price', 8, 2);
             $table->text('description')->nullable();
-            $table->date('deleted_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

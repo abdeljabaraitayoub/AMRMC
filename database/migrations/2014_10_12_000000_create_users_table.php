@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->enum('role', ['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']);
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
         });
     }
 

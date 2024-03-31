@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAssociationAgentRequest;
 use App\Http\Requests\UpdateAssociationAgentRequest;
 use App\Models\AssociationAgent;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AssociationAgentController extends Controller
 {
@@ -14,10 +16,9 @@ class AssociationAgentController extends Controller
     public function index()
     {
         $agents = AssociationAgent::join('associations', 'associations.id', '=', 'association_agents.association_id')
-            ->join('agents', 'agents.id', '=', 'association_agents.agent_id')
-            ->select('association_agents.*', 'associations.name as association_name', 'agents.name as agent_name')
+            ->join('users', 'users.id', '=', 'association_agents.id')
             ->get();
-        return AssociationAgent::all();
+        return $agents;
     }
 
     /**
@@ -25,31 +26,49 @@ class AssociationAgentController extends Controller
      */
     public function store(StoreAssociationAgentRequest $request)
     {
+        $user = User::create($request->all());
+        $request->merge(['id' => $user->id]);
+        $associationAgent = AssociationAgent::create($request->all());
+        return response()->json($associationAgent, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(AssociationAgent $associationAgent)
+    public function show($associationAgent)
     {
-        //
+        $agent = AssociationAgent::join('associations', 'associations.id', '=', 'association_agents.association_id')
+            ->join('users', 'users.id', '=', 'association_agents.id')
+            ->where('association_agents.id', $associationAgent)
+            ->get();
+        return $agent;
     }
+
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAssociationAgentRequest $request, AssociationAgent $associationAgent)
+    public function update(UpdateAssociationAgentRequest $request, $associationAgent)
     {
-        //
+        $associationAgent = AssociationAgent::findOrFail($associationAgent);
+
+        if ($associationAgent->id) {
+            $user = User::findOrFail($associationAgent->id);
+            $user->update($request->only(['name', 'email', 'phone', 'date_of_birth', 'country', 'city', 'address']));
+        }
+        $associationAgent->update($request->only(['association_id', 'position', 'bio']));
+        return response()->json($associationAgent, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AssociationAgent $associationAgent)
-    {
-        $associationAgent->delete();
-        return response()->json(null, 204);
-    }
+    // public function destroy($associationAgent)
+    // {
+    //     $associationAgent = User::findOrFail($associationAgent);
+    //     $associationAgent->update(['deleted_at' => now()]);
+
+    //     return response()->json(null, 204);
+    // }
 }

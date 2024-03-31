@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAssociationRequest;
 use App\Http\Requests\UpdateAssociationRequest;
 use App\Models\Association;
+use Illuminate\Support\Facades\DB;
 
 class AssociationController extends Controller
 {
@@ -51,6 +52,6 @@ class AssociationController extends Controller
     public function destroy(Association $association)
     {
         $association->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Association deleted successfully', 'query' => DB::getQueryLog()], 200);
     }
 }
