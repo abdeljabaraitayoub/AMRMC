@@ -17,5 +17,6 @@ class Medics extends Model
         'manufacturer',
         'price',
         'description',
+        'image',
     ];
 }

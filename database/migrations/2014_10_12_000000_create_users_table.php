@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('address')->nullable();
             $table->enum('role', ['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

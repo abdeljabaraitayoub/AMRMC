@@ -6,6 +6,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Mail\SendPassword;
+use Illuminate\Support\Facades\Mail;
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 class UserController extends Controller
 {
@@ -14,9 +21,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return User::all()->whereNull('deleted_at');
-        // ->where('role', '=', $request->role)
-        // ->paginate(5);
+        return User::paginate(5);
+
+        // ->where('role', '=', $request->role) 
     }
 
     /**
@@ -24,6 +31,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $file = $request->file('img');
+        $name = $request->name;
+        $filename = $file->hashName();
+        $path = $name . '/' . $filename;
+        Storage::disk('Users')->put($path, file_get_contents($file));
+        $url = Storage::disk('Users')->url($path);
+        $request->merge(['image' => $url]);
+        $password = str::random(8);
+        $request->merge(['password' => $password]);
+        mail::to($request->email)->send(new SendPassword($request->email, $password));
         $user = User::create($request->all());
         activity('create User')
             ->performedOn($user)

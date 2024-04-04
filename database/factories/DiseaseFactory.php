@@ -18,10 +18,10 @@ class DiseaseFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'description' => $this->faker->optional()->text,
-            'symptoms' => $this->faker->optional()->text,
-            'causes' => $this->faker->optional()->text,
-            'treatment' => $this->faker->optional()->text,
+            'description' => $this->faker->text,
+            'symptoms' => $this->faker->text,
+            'causes' => $this->faker->text,
+            'treatment' => $this->faker->text,
         ];
     }
 }

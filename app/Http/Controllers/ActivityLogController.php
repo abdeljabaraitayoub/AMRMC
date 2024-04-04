@@ -14,7 +14,7 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $activities = Activity::with('causer', 'subject')->get();
+        $activities = Activity::with('causer', 'subject')->paginate(5);
         return ActivityResource::collection($activities);
     }
 

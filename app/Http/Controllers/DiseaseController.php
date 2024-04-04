@@ -15,7 +15,7 @@ class DiseaseController extends Controller
     public function index()
     {
         $diseases = Disease::withCount('patients')
-            ->get();
+            ->paginate(5);
         return $diseases;
     }
 
@@ -26,6 +26,11 @@ class DiseaseController extends Controller
     public function store(StoreDiseaseRequest $request)
     {
         $disease = Disease::create($request->all());
+        activity('create Disease')
+            ->performedOn($disease)
+            ->causedBy(auth()->user())
+            ->withProperties($request->all())
+            ->log('Disease created successfully');
         return response()->json($disease, 201);
     }
 
@@ -44,6 +49,11 @@ class DiseaseController extends Controller
     public function update(UpdateDiseaseRequest $request, Disease $disease)
     {
         $disease->update($request->all());
+        activity('update Disease')
+            ->performedOn($disease)
+            ->causedBy(auth()->user())
+            ->withProperties($request->all())
+            ->log('Disease updated successfully');
         return response()->json($disease, 200);
     }
 
@@ -53,6 +63,10 @@ class DiseaseController extends Controller
     public function destroy(Disease $disease)
     {
         $disease->delete();
+        activity('delete Disease')
+            ->performedOn($disease)
+            ->causedBy(auth()->user())
+            ->log('Disease deleted successfully');
         return response()->json(['message' => 'Disease deleted successfully'], 200);
     }
 }

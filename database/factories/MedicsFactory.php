@@ -23,7 +23,7 @@ class MedicsFactory extends Factory
             'manufacturer' => $this->faker->company,
             'price' => $this->faker->randomFloat(2, 0, 1000),
             'description' => $this->faker->optional()->text,
-            'image' => $this->faker->optional()->word,
+            'image' => $this->faker->imageUrl(),
         ];
     }
 }

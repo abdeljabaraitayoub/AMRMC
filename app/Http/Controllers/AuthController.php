@@ -15,6 +15,12 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        $user = new User;
+        activity('login')
+            ->performedOn($user)
+            ->causedBy(Auth::user())
+            ->withProperties($request->all())
+            ->log('User logged in successfully');
         return $this->respondWithToken($token);
     }
     public function register(Request $request)
@@ -30,6 +36,12 @@ class AuthController extends Controller
         $user->date_of_birth = $request->date_of_birth;
         $user->country = $request->country;
         $user->save();
+        activity('register')
+            ->performedOn($user)
+            ->causedBy($user->id)
+            ->withProperties($request->all())
+            ->log('User created successfully');
+        return response()->json(['message' => 'User created successfully'], 201);
 
         // dd(Auth::user());
 
@@ -53,8 +65,12 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        $user = new User;
+        activity('logout')
+            ->performedOn($user)
+            ->causedBy(Auth::user())
+            ->log('User logged out successfully');
         auth()->logout();
-
         return response()->json(['message' => 'Successfully logged out']);
     }
 

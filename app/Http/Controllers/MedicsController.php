@@ -15,7 +15,7 @@ class MedicsController extends Controller
      */
     public function index()
     {
-        $medics = Medics::all();
+        $medics = Medics::paginate(5);
         return $medics;
     }
 
@@ -25,13 +25,12 @@ class MedicsController extends Controller
      */
     public function store(StoreMedicsRequest $request)
     {
-        $file = $request->file('image');
+        $file = $request->file('file');
         $name = $request->name;
-        // $filePath =  $file->getClientOriginalName();
         Storage::disk('medics')->put($name, file_get_contents($file));
         $url = Storage::disk('medics')->url($name);
+        $request->merge(['image' => $url]);
         $medics = Medics::create($request->all());
-        // return  response()->json($medics, 201);
         return response()->json(['url' => $url, 'medics' => $medics], 201);
     }
 

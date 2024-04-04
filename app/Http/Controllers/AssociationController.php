@@ -5,7 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAssociationRequest;
 use App\Http\Requests\UpdateAssociationRequest;
 use App\Models\Association;
+use App\Models\AssociationAgent;
+use App\Models\User;
+use AWS\CRT\HTTP\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendPassword;
 
 class AssociationController extends Controller
 {
@@ -14,7 +20,7 @@ class AssociationController extends Controller
      */
     public function index()
     {
-        $associations = Association::all();
+        $associations = Association::paginate(5);
         return $associations;
     }
 
@@ -24,12 +30,26 @@ class AssociationController extends Controller
      */
     public function store(StoreAssociationRequest $request)
     {
+        // Create an association
         $association = Association::create($request->all());
-        return response()->json($association, 201);
+        // Create a user
+        $password = Str::random(8);
+        $role = 'association_agent';
+        $request->merge(['role' => $role]);
+        $request->merge(['password' => bcrypt($password)]);
+        $user = User::create($request->all());
+        // Attach the user to the association
+        $association_id = $association->id;
+        $user_id = $user->id;
+        $request->merge(['association_id' => $association_id, 'id' => $user_id, 'position' => 'president', 'bio' => $association->description]);
+        $association_agent = AssociationAgent::create($request->all());
+        Mail::to($association->email)->send(new SendPassword($user->email, $password));
+
+        return response()->json(['association' => $association, 'user' => $user, 'password' => $password, 'agent' => $association_agent], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource.  
      */
     public function show(Association $association)
     {

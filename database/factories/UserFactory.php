@@ -33,6 +33,7 @@ class UserFactory extends Factory
             'address' => fake()->address(),
             'role' => fake()->randomElement(['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']),
             'password' => static::$password ??= Hash::make('password'),
+            'image' => fake()->imageUrl(),
         ];
     }
 
