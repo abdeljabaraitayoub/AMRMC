@@ -39,3 +39,4 @@ Route::apiResource('diseases', 'App\Http\Controllers\DiseaseController');
 Route::apiResource('patients', 'App\Http\Controllers\PatientController');
 
 Route::apiResource('medics', 'App\Http\Controllers\MedicsController');
+Route::apiResource('backup', 'App\Http\Controllers\BackupController');

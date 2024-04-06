@@ -20,7 +20,10 @@ class AssociationController extends Controller
      */
     public function index()
     {
-        $associations = Association::paginate(5);
+
+        DB::enableQueryLog();
+
+        $associations = Association::orderBy('id', 'asc')->paginate(5);
         return $associations;
     }
 
