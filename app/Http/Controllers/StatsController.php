@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Disease;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -31,6 +32,14 @@ class StatsController extends Controller
             'users' => $users
         ]);
     }
+    public function patients_disease()
+    {
+
+        $diseases = Disease::withCount('patients')->get()
+            ->pluck('patients_count', 'name');;
+        return response()->json($diseases);
+    }
+
 
     /**
      * Store a newly created resource in storage.

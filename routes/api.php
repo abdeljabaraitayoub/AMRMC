@@ -40,4 +40,5 @@ Route::apiResource('patients', 'App\Http\Controllers\PatientController');
 
 Route::apiResource('medics', 'App\Http\Controllers\MedicsController');
 Route::apiResource('backup', 'App\Http\Controllers\BackupController');
-Route::get('patients/stats/monthly-registrations', 'App\Http\Controllers\StatsController@monthlyRegistrations');
+Route::get('stats/monthly-registrations', 'App\Http\Controllers\StatsController@monthlyRegistrations');
+Route::get('stats/patients-disease', 'App\Http\Controllers\StatsController@patients_disease');
