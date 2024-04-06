@@ -130,8 +130,7 @@ export default {
   },
   methods: {
     async fetchData() {
-      api.get('/patients/stats/monthly-registrations').then((response) => {
-        // this.chartData = response.data
+      api.get('/stats/monthly-registrations').then((response) => {
         this.chartData.series[0].data = response.data.patients
         this.chartData.series[1].data = response.data.users
       })
