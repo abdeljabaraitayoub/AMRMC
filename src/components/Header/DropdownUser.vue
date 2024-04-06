@@ -36,7 +36,12 @@ export default {
       </span>
 
       <span class="h-12 w-12 rounded-full">
-        <img src="@/assets/images/user/user-01.png" alt="User" />
+        <img
+          class="h-12 w-12 rounded-full"
+          :src="profile.image"
+          :alt="profile.name"
+          loading="lazy"
+        />
       </span>
 
       <svg

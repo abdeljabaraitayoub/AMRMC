@@ -1,16 +1,16 @@
 <script>
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
 import DefaultLayout from '@/layouts/DefaultAdminLayout.vue'
-import DiseaseTable from '@/components/admin/DiseaseTable.vue'
+import MedicsTable from '@/components/admin/MedicsTable.vue'
 export default {
   components: {
     BreadcrumbDefault,
     DefaultLayout,
-    DiseaseTable
+    MedicsTable
   },
   data() {
     return {
-      pageTitle: 'Diseases'
+      pageTitle: 'Medics'
     }
   }
 }
@@ -19,7 +19,7 @@ export default {
   <DefaultLayout>
     <div class="mx-auto max-w-7xl">
       <BreadcrumbDefault :pageTitle="pageTitle" />
-      <DiseaseTable />
+      <MedicsTable />
     </div>
   </DefaultLayout>
 </template>

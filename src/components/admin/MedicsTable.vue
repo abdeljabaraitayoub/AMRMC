@@ -1,22 +1,17 @@
 <script>
 import api from '@/stores/api'
-import DiseaseCreateModal from '@/components/admin/DiseaseCreateModal.vue'
-import { useModalStore } from '@/stores/modal'
+import MedicsCreateModal from '@/components/admin/MedicsCreateModal.vue'
 import { getCurrentInstance, watch } from 'vue'
+import { useModalStore } from '@/stores/modal'
 
 export default {
-  components: {
-    DiseaseCreateModal
-  },
   setup() {
     const store = useModalStore()
     const instance = getCurrentInstance()
-    var updated = useModalStore().updated
     const setModal = useModalStore().setModal
     const setData = useModalStore().setData
-    const openModal = useModalStore().openModal
     const setPackage = useModalStore().setPackage
-
+    const openModal = useModalStore().openModal
     watch(
       () => store.updated,
       () => {
@@ -25,14 +20,18 @@ export default {
         }
       }
     )
-    return { setModal, setData, openModal, setPackage, updated }
+    return { setModal, setData, setPackage, openModal }
+  },
+  components: {
+    MedicsCreateModal
   },
   data() {
     return {
-      entity: 'diseases',
+      entity: 'medics',
+      packages: [],
       page: 1,
       pages: 0,
-      packages: []
+      selectedMedicId: null
     }
   },
   watch: {
@@ -54,13 +53,14 @@ export default {
     },
     fetchdata() {
       api.get(`/${this.entity}?page=${this.page}`).then((response) => {
-        this.pages = response.data.last_page
         this.packages = response.data.data
+        this.pages = response.data.last_page
       })
     },
     deleteItem(id) {
       api.delete(`/${this.entity}/${id}`).then(() => {
         this.packages = this.packages.filter((item) => item.id !== id)
+        this.fetchdata()
       })
     }
   }
@@ -77,30 +77,40 @@ export default {
             <th class="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
               nom
             </th>
+            <th class="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">type</th>
             <th class="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-              Description
+              dosage_form
             </th>
-            <th class="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-              DiseasePrevalence
-            </th>
+            <th class="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">price</th>
             <th class="py-4 px-4 font-medium text-black dark:text-white">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in packages" :key="index">
             <td class="py-5 px-4 pl-9 xl:pl-11">
-              <h5 class="font-medium text-black dark:text-white">{{ item.name }}</h5>
+              <div class="flex items-center gap-3">
+                <img class="h-11 w-11 rounded-full" :src="item.image" loading="lazy" />
+                <p class="hidden text-black dark:text-white sm:block">{{ item.name }}</p>
+              </div>
             </td>
             <td class="py-5 px-4">
-              <p class="text-black dark:text-white">{{ item.description }}</p>
+              <p class="text-black dark:text-white">{{ item.type }}</p>
             </td>
             <td class="py-5 px-4">
               <p class="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium">
-                {{ item.patients_count }}
+                {{ item.dosage_form }}
               </p>
             </td>
             <td class="py-5 px-4">
-              <div class="flex items-center space-x-3.5">
+              <p class="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium">
+                {{ item.price }}
+              </p>
+            </td>
+            <td class="py-5 px-4">
+              <div class="flex items-center space-x-3.5 justify-center">
+                <!-- <button class="hover:text-primary">
+                  <i class="bi bi-archive"></i>
+                </button> -->
                 <button @click="deleteItem(item.id)" class="hover:text-primary">
                   <svg
                     class="fill-current"
@@ -128,6 +138,7 @@ export default {
                     />
                   </svg>
                 </button>
+
                 <button class="hover:text-primary" @click="edit(item.id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
@@ -166,10 +177,10 @@ export default {
     </div>
   </div>
   <button
-    v-on:click="showModal()"
-    class="inline-flex items-center justify-center gap-2.5 py-4 px-10 text-center font-medium hover:bg-opacity-90 lg:px-8 xl:px-10 bg-primary text-white"
+    @click="showModal()"
+    class="inline-flex mt-6 items-center justify-center gap-2.5 py-4 px-10 text-center font-medium hover:bg-opacity-90 lg:px-8 xl:px-10 bg-primary text-white"
   >
     Create
   </button>
-  <DiseaseCreateModal />
+  <MedicsCreateModal />
 </template>

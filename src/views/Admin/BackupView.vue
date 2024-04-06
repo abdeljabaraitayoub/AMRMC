@@ -1,25 +1,26 @@
 <script>
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
 import DefaultLayout from '@/layouts/DefaultAdminLayout.vue'
-import DiseaseTable from '@/components/admin/DiseaseTable.vue'
+import BackupCards from '@/components/admin/BackupCards.vue'
 export default {
   components: {
     BreadcrumbDefault,
     DefaultLayout,
-    DiseaseTable
+    BackupCards
   },
   data() {
     return {
-      pageTitle: 'Diseases'
+      pageTitle: 'Activities'
     }
   }
 }
 </script>
+
 <template>
   <DefaultLayout>
     <div class="mx-auto max-w-7xl">
       <BreadcrumbDefault :pageTitle="pageTitle" />
-      <DiseaseTable />
+      <BackupCards />
     </div>
   </DefaultLayout>
 </template>

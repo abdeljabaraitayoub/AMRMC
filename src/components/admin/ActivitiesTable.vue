@@ -5,7 +5,14 @@ export default {
   data() {
     return {
       entity: 'activities',
-      packages: []
+      packages: [],
+      page: 1,
+      pages: 0
+    }
+  },
+  watch: {
+    page() {
+      this.fetchdata()
     }
   },
   mounted() {
@@ -13,8 +20,9 @@ export default {
   },
   methods: {
     fetchdata() {
-      api.get(`/${this.entity}`).then((response) => {
+      api.get(`/${this.entity}?page=${this.page}`).then((response) => {
         this.packages = response.data.data
+        this.pages = response.data.meta.last_page
       })
     },
 
@@ -73,11 +81,32 @@ export default {
         </tbody>
       </table>
     </div>
-    <a
-      class="inline-flex items-center justify-center gap-2.5 py-4 px-10 text-center font-medium hover:bg-opacity-90 lg:px-8 xl:px-10 bg-black text-white"
-      ><span>
-        <i class="bi bi-person-plus"></i>
-      </span>
-    </a>
+    <div
+      class="mt-4.5 w-fit mx-auto mb-5.5 flex rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]"
+    >
+      <button
+        :disabled="page <= 1"
+        @click="page--"
+        class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
+      >
+        <span class="font-semibold text-black dark:text-white">«</span>
+      </button>
+      <button
+        v-for="(item, index) in pages"
+        :key="index"
+        @click="page = index + 1"
+        class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
+        :class="{ 'opacity-50': page === index + 1 }"
+      >
+        <span class="text-black font-semibold dark:text-white">{{ index + 1 }}</span>
+      </button>
+      <button
+        :disabled="page == pages"
+        @click="page++"
+        class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
+      >
+        <span class="font-semibold text-black dark:text-white">»</span>
+      </button>
+    </div>
   </div>
 </template>

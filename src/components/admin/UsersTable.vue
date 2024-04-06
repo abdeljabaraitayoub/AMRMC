@@ -1,26 +1,57 @@
 <script>
 import api from '@/stores/api'
+import UserCreateModal from '@/components/admin/UserCreateModal.vue'
+import { useModalStore } from '@/stores/modal'
 export default {
-  components: {},
+  components: {
+    UserCreateModal
+  },
+  setup() {
+    const setModal = useModalStore().setModal
+    const setData = useModalStore().setData
+    const openModal = useModalStore().openModal
+    return { setModal, setData, openModal }
+  },
   data() {
     return {
       entity: 'users',
-      packages: []
+      packages: [],
+      page: 1,
+      pages: 0
     }
   },
+  watch: {
+    page() {
+      this.fetchdata()
+    }
+  },
+
   mounted() {
     this.fetchdata()
   },
+  showModal() {
+    this.setModal()
+  },
   methods: {
+    edit(id) {
+      const data = this.packages.find((item) => item.id === id)
+      console.log(data)
+      this.setData(data)
+      this.openModal()
+    },
+    showModal() {
+      this.setModal()
+    },
     fetchdata() {
-      api.get(`/${this.entity}`).then((response) => {
-        this.packages = response.data
+      api.get(`/${this.entity}?&page=${this.page}`).then((response) => {
+        this.packages = response.data.data
+        this.pages = response.data.last_page
       })
     },
-
     deleteItem(id) {
       api.delete(`/${this.entity}/${id}`).then(() => {
         this.packages = this.packages.filter((item) => item.id !== id)
+        this.fetchdata()
       })
     }
   }
@@ -45,8 +76,13 @@ export default {
         <tbody>
           <tr v-for="(item, index) in packages" :key="index">
             <td class="py-5 px-4 pl-9 xl:pl-11">
-              <h5 class="font-medium text-black dark:text-white">{{ item.name }}</h5>
-              <p class="text-sm">{{ item.email }}</p>
+              <div class="flex items-center gap-3">
+                <img class="h-11 w-11 rounded-full" :src="item.image" loading="lazy" />
+                <div>
+                  <h5 class="font-medium text-black dark:text-white">{{ item.name }}</h5>
+                  <p class="text-sm">{{ item.email }}</p>
+                </div>
+              </div>
             </td>
             <td class="py-5 px-4">
               <p class="text-black dark:text-white">{{ item.role }}</p>
@@ -89,24 +125,8 @@ export default {
                   </svg>
                 </button>
 
-                <button class="hover:text-primary">
-                  <svg
-                    class="fill-current"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M16.8754 11.6719C16.5379 11.6719 16.2285 11.9531 16.2285 12.3187V14.8219C16.2285 15.075 16.0316 15.2719 15.7785 15.2719H2.22227C1.96914 15.2719 1.77227 15.075 1.77227 14.8219V12.3187C1.77227 11.9812 1.49102 11.6719 1.12539 11.6719C0.759766 11.6719 0.478516 11.9531 0.478516 12.3187V14.8219C0.478516 15.7781 1.23789 16.5375 2.19414 16.5375H15.7785C16.7348 16.5375 17.4941 15.7781 17.4941 14.8219V12.3187C17.5223 11.9531 17.2129 11.6719 16.8754 11.6719Z"
-                      fill=""
-                    />
-                    <path
-                      d="M8.55074 12.3469C8.66324 12.4594 8.83199 12.5156 9.00074 12.5156C9.16949 12.5156 9.31012 12.4594 9.45074 12.3469L13.4726 8.43752C13.7257 8.1844 13.7257 7.79065 13.5007 7.53752C13.2476 7.2844 12.8539 7.2844 12.6007 7.5094L9.64762 10.4063V2.1094C9.64762 1.7719 9.36637 1.46252 9.00074 1.46252C8.66324 1.46252 8.35387 1.74377 8.35387 2.1094V10.4063L5.40074 7.53752C5.14762 7.2844 4.75387 7.31252 4.50074 7.53752C4.24762 7.79065 4.27574 8.1844 4.50074 8.43752L8.55074 12.3469Z"
-                      fill=""
-                    />
-                  </svg>
+                <button class="hover:text-primary" @click="edit(item.id)">
+                  <i class="bi bi-pencil-square"></i>
                 </button>
               </div>
             </td>
@@ -114,11 +134,39 @@ export default {
         </tbody>
       </table>
     </div>
-    <a
-      class="inline-flex items-center justify-center gap-2.5 py-4 px-10 text-center font-medium hover:bg-opacity-90 lg:px-8 xl:px-10 bg-black text-white"
-      ><span>
-        <i class="bi bi-person-plus"></i>
-      </span>
-    </a>
+    <div
+      class="mt-4.5 w-fit mx-auto mb-5.5 flex rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]"
+    >
+      <button
+        :disabled="page <= 1"
+        @click="page--"
+        class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
+      >
+        <span class="font-semibold text-black dark:text-white">«</span>
+      </button>
+      <button
+        v-for="(item, index) in pages"
+        :key="index"
+        @click="page = index + 1"
+        class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
+        :class="{ 'opacity-50': page === index + 1 }"
+      >
+        <span class="text-black font-semibold dark:text-white">{{ index + 1 }}</span>
+      </button>
+      <button
+        :disabled="page == pages"
+        @click="page++"
+        class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
+      >
+        <span class="font-semibold text-black dark:text-white">»</span>
+      </button>
+    </div>
   </div>
+  <button
+    @click="showModal()"
+    class="inline-flex mt-6 items-center justify-center gap-2.5 py-4 px-10 text-center font-medium hover:bg-opacity-90 lg:px-8 xl:px-10 bg-primary text-white"
+  >
+    Create
+  </button>
+  <UserCreateModal />
 </template>

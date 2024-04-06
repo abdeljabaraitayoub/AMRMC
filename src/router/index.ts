@@ -18,6 +18,8 @@ import UsersView from '@/views/Admin/UsersView.vue'
 import AssociationsView from '@/views/Admin/AssociationsView.vue'
 import ActivitiesView from '@/views/Admin/ActivitiesView.vue'
 import DiseaseView from '@/views/Admin/DiseaseView.vue'
+import MedicsView from '@/views/Admin/MedicsView.vue'
+import BackupView from '@/views/Admin/BackupView.vue'
 
 const routes = [
   {
@@ -147,6 +149,23 @@ const routes = [
     component: DiseaseView,
     meta: {
       title: 'Disease'
+    }
+  }
+  ,
+  {
+    path: '/medics',
+    name: 'Medics',
+    component: MedicsView,
+    meta: {
+      title: 'Medics'
+    }
+  } ,
+  {
+    path: '/backups',
+    name: 'backups',
+    component: BackupView,
+    meta: {
+      title: 'backups'
     }
   }
 ]
