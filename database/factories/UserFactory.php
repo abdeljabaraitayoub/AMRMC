@@ -34,6 +34,9 @@ class UserFactory extends Factory
             'role' => fake()->randomElement(['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']),
             'password' => static::$password ??= Hash::make('password'),
             'image' => fake()->imageUrl(),
+
+
+            'created_at' => fake()->dateTimeBetween('-4 month', '+8 month'),
         ];
     }
 

@@ -6,6 +6,7 @@ use App\Http\Resources\ActivityResource;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ActivityLogController extends Controller
 {
@@ -14,7 +15,10 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $activities = Activity::with('causer', 'subject')->paginate(5);
+        $activities = Activity::with('causer', 'subject')->orderBy('id', 'desc')->paginate(6);
+        foreach ($activities as $activity) {
+            $activity->time_passed = Carbon::parse($activity->created_at)->diffForHumans();
+        }
         return ActivityResource::collection($activities);
     }
 
