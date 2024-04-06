@@ -19,27 +19,27 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
       <!-- ====== Chart One Start -->
       <ChartOne />
       <!-- ====== Chart One End -->
+      <ChartThree />
 
       <!-- ====== Chart Two Start -->
+      <ChatCard />
       <ChartTwo />
       <!-- ====== Chart Two End -->
 
       <!-- ====== Chart Three Start -->
-      <ChartThree />
       <!-- ====== Chart Three End -->
 
       <!-- ====== Map One Start -->
-      <MapOne />
+      <!-- <MapOne /> -->
       <!-- ====== Map One End -->
 
       <!-- ====== Table One Start -->
-      <div class="col-span-12 xl:col-span-8">
+      <div class="col-span-12 xl:col-span-12">
         <TableOne />
       </div>
       <!-- ====== Table One End -->
 
       <!-- ====== Chat Card Start -->
-      <ChatCard />
       <!-- ====== Chat Card End -->
     </div>
   </DefaultLayout>
