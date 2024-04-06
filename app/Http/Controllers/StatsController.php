@@ -35,9 +35,14 @@ class StatsController extends Controller
     public function patients_disease()
     {
 
-        $diseases = Disease::withCount('patients')->get()
-            ->pluck('patients_count', 'name');;
-        return response()->json($diseases);
+        $diseases_count = Disease::withCount('patients')->get()
+            ->pluck('patients_count');
+        $names = Disease::with('patients')->get()
+            ->pluck('name');
+        return response()->json([
+            'diseases' => $diseases_count,
+            'names' => $names
+        ]);
     }
 
 

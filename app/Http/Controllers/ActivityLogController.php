@@ -15,7 +15,7 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $activities = Activity::with('causer', 'subject')->orderBy('id', 'desc')->paginate(6);
+        $activities = Activity::with('causer', 'subject')->orderBy('id', 'desc')->paginate(4);
         foreach ($activities as $activity) {
             $activity->time_passed = Carbon::parse($activity->created_at)->diffForHumans();
         }
