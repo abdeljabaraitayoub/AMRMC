@@ -1,123 +1,141 @@
-<script setup lang="ts">
+<script>
 import { ref } from 'vue'
-// @ts-ignore
+import { reactive } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
+import api from '@/stores/api'
 
-const chartData = {
-  series: [
-    {
-      name: 'Product One',
-      data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45]
-    },
-
-    {
-      name: 'Product Two',
-      data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51]
-    }
-  ],
-  labels: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
-}
-
-const chart = ref(null)
-
-const apexOptions = {
-  legend: {
-    show: false,
-    position: 'top',
-    horizontalAlign: 'left'
-  },
-  colors: ['#3C50E0', '#80CAEE'],
-  chart: {
-    fontFamily: 'Satoshi, sans-serif',
-    height: 335,
-    type: 'area',
-    dropShadow: {
-      enabled: true,
-      color: '#623CEA14',
-      top: 10,
-      blur: 4,
-      left: 0,
-      opacity: 0.1
-    },
-
-    toolbar: {
-      show: false
-    }
-  },
-  responsive: [
-    {
-      breakpoint: 1024,
-      options: {
-        chart: {
-          height: 300
+export default {
+  setup() {
+    const chartData = reactive({
+      series: [
+        {
+          name: 'patients'
+          // data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45]
+        },
+        {
+          name: 'users``',
+          data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51]
         }
-      }
-    },
-    {
-      breakpoint: 1366,
-      options: {
-        chart: {
-          height: 350
-        }
-      }
-    }
-  ],
-  stroke: {
-    width: [2, 2],
-    curve: 'straight'
-  },
+      ],
+      labels: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+    })
+    const chart = ref(null)
 
-  labels: {
-    show: false,
-    position: 'top'
-  },
-  grid: {
-    xaxis: {
-      lines: {
-        show: true
+    const apexOptions = ref({
+      legend: {
+        show: false,
+        position: 'top',
+        horizontalAlign: 'left'
+      },
+      colors: ['#3C50E0', '#80CAEE'],
+      chart: {
+        fontFamily: 'Satoshi, sans-serif',
+        height: 335,
+        type: 'area',
+        dropShadow: {
+          enabled: true,
+          color: '#623CEA14',
+          top: 10,
+          blur: 4,
+          left: 0,
+          opacity: 0.1
+        },
+        toolbar: {
+          show: false
+        }
+      },
+      responsive: [
+        {
+          breakpoint: 1024,
+          options: {
+            chart: {
+              height: 300
+            }
+          }
+        },
+        {
+          breakpoint: 1366,
+          options: {
+            chart: {
+              height: 350
+            }
+          }
+        }
+      ],
+      stroke: {
+        width: [2, 2],
+        curve: 'straight'
+      },
+      labels: {
+        show: false,
+        position: 'top'
+      },
+      grid: {
+        xaxis: {
+          lines: {
+            show: true
+          }
+        },
+        yaxis: {
+          lines: {
+            show: true
+          }
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      markers: {
+        size: 4,
+        colors: '#fff',
+        strokeColors: ['#3056D3', '#80CAEE'],
+        strokeWidth: 3,
+        strokeOpacity: 0.9,
+        strokeDashArray: 0,
+        fillOpacity: 1,
+        discrete: [],
+        hover: {
+          size: undefined,
+          sizeOffset: 5
+        }
+      },
+      xaxis: {
+        type: 'category',
+        categories: chartData.labels,
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        }
+      },
+      yaxis: {
+        title: {
+          style: {
+            fontSize: '0px'
+          }
+        },
+        min: 0,
+        max: 100
       }
-    },
-    yaxis: {
-      lines: {
-        show: true
-      }
+    })
+
+    return { chartData, chart, apexOptions }
+  },
+  components: {
+    VueApexCharts
+  },
+  mounted() {
+    this.fetchData()
+  },
+  methods: {
+    async fetchData() {
+      api.get('/patients/stats/monthly-registrations').then((response) => {
+        // this.chartData = response.data
+        this.chartData.series[0].data = response.data.patients
+        this.chartData.series[1].data = response.data.users
+      })
     }
-  },
-  dataLabels: {
-    enabled: false
-  },
-  markers: {
-    size: 4,
-    colors: '#fff',
-    strokeColors: ['#3056D3', '#80CAEE'],
-    strokeWidth: 3,
-    strokeOpacity: 0.9,
-    strokeDashArray: 0,
-    fillOpacity: 1,
-    discrete: [],
-    hover: {
-      size: undefined,
-      sizeOffset: 5
-    }
-  },
-  xaxis: {
-    type: 'category',
-    categories: chartData.labels,
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    }
-  },
-  yaxis: {
-    title: {
-      style: {
-        fontSize: '0px'
-      }
-    },
-    min: 0,
-    max: 100
   }
 }
 </script>
