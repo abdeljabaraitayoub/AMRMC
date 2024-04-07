@@ -1,61 +1,54 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-import BrandOne from '@/assets/images/brand/brand-01.svg'
-import BrandTwo from '@/assets/images/brand/brand-02.svg'
-import BrandThree from '@/assets/images/brand/brand-03.svg'
-import BrandFour from '@/assets/images/brand/brand-04.svg'
-import BrandFive from '@/assets/images/brand/brand-05.svg'
-
-const brandData = ref([
-  {
-    logo: BrandOne,
-    name: 'Google',
-    visitors: 3.5,
-    revenues: '5,768',
-    sales: 590,
-    conversion: 4.8
-  },
-  {
-    logo: BrandTwo,
-    name: 'Twitter',
-    visitors: 2.2,
-    revenues: '4,635',
-    sales: 467,
-    conversion: 4.3
-  },
-  {
-    logo: BrandThree,
-    name: 'Github',
-    visitors: 2.1,
-    revenues: '4,290',
-    sales: 420,
-    conversion: 3.7
-  },
-  {
-    logo: BrandFour,
-    name: 'Vimeo',
-    visitors: 1.5,
-    revenues: '3,580',
-    sales: 389,
-    conversion: 2.5
-  },
-  {
-    logo: BrandFive,
-    name: 'Facebook',
-    visitors: 3.5,
-    revenues: '6,768',
-    sales: 390,
-    conversion: 4.2
+<script>
+export default {
+  setup() {
+    return {
+      brandData: [
+        {
+          name: 'Brand 1',
+          visitors: 12,
+          revenues: 120,
+          sales: 10,
+          conversion: 20
+        },
+        {
+          name: 'Brand 2',
+          visitors: 10,
+          revenues: 100,
+          sales: 8,
+          conversion: 18
+        },
+        {
+          name: 'Brand 3',
+          visitors: 8,
+          revenues: 80,
+          sales: 6,
+          conversion: 16
+        },
+        {
+          name: 'Brand 4',
+          visitors: 6,
+          revenues: 60,
+          sales: 4,
+          conversion: 14
+        },
+        {
+          name: 'Brand 5',
+          visitors: 4,
+          revenues: 40,
+          sales: 2,
+          conversion: 12
+        }
+      ]
+    }
   }
-])
+}
 </script>
 
 <template>
   <div
     class="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1"
   >
-    <h4 class="mb-6 text-xl font-semibold text-black dark:text-white">Top Channels</h4>
+    <h4 class="mb-6 text-xl font-semibold text-black dark:text-white">Top Associations</h4>
 
     <div class="flex flex-col">
       <div class="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
@@ -84,9 +77,9 @@ const brandData = ref([
         }`"
       >
         <div class="flex items-center gap-3 p-2.5 xl:p-5">
-          <div class="flex-shrink-0">
+          <!-- <div class="flex-shrink-0">
             <img :src="brand.logo" alt="Brand" />
-          </div>
+          </div> -->
           <p class="hidden text-black dark:text-white sm:block">{{ brand.name }}</p>
         </div>
 
