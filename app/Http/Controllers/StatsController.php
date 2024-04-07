@@ -7,6 +7,7 @@ use App\Models\Disease;
 use App\Models\Medics;
 use App\Models\Patient;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -76,14 +77,38 @@ class StatsController extends Controller
         $associations = Association::count();
         $diseases = Disease::count();
         $medics = Medics::count();
+
+        $userGrowthRate = $this->calculateGrowthRate(User::class);
+        $associationGrowthRate = $this->calculateGrowthRate(Association::class);
+        $diseaseGrowthRate = $this->calculateGrowthRate(Disease::class);
+        $medicsGrowthRate = $this->calculateGrowthRate(Medics::class);
+
         return response()->json([
             'users' => $users,
             'associations' => $associations,
             'diseases' => $diseases,
-            'medics' => $medics
+            'medics' => $medics,
+            'userGrowthRate' => $userGrowthRate,
+            'associationGrowthRate' => $associationGrowthRate,
+            'diseaseGrowthRate' => $diseaseGrowthRate,
+            'medicsGrowthRate' => $medicsGrowthRate
         ]);
     }
 
+    public function calculateGrowthRate($model)
+    {
+        $lastMonthStart = Carbon::now()->subMonth()->startOfMonth();
+        $thisMonthEnd = Carbon::now()->endOfMonth();
+
+        $countByMonth = $model::selectRaw('COUNT(*) as total, EXTRACT(MONTH FROM created_at) as month')
+            ->whereBetween('created_at', [$lastMonthStart, $thisMonthEnd])
+            ->groupBy('month')
+            ->get();
+
+        if ($countByMonth->count() == 2 && $countByMonth[0]['total'] > 0) {
+            return ($countByMonth[1]['total'] - $countByMonth[0]['total']) / $countByMonth[0]['total'];
+        }
+    }
     /**
      * Display the specified resource.
      */
