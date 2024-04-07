@@ -31,7 +31,8 @@ class UserFactory extends Factory
             'country' => fake()->country(),
             'city' => fake()->city(),
             'address' => fake()->address(),
-            'role' => fake()->randomElement(['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']),
+            // 'role' => fake()->randomElement(['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']),
+            'role' => fake()->randomElement(['admin']),
             'password' => static::$password ??= Hash::make('password'),
             'image' => fake()->imageUrl(),
 

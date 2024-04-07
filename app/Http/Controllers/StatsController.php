@@ -34,7 +34,6 @@ class StatsController extends Controller
     }
     public function patients_disease()
     {
-
         $diseases_count = Disease::withCount('patients')->get()
             ->pluck('patients_count');
         $names = Disease::with('patients')->get()
@@ -42,6 +41,30 @@ class StatsController extends Controller
         return response()->json([
             'diseases' => $diseases_count,
             'names' => $names
+        ]);
+    }
+    public function roles()
+    {
+        $rolesOfInterest = ['admin', 'doctor', 'patient'];
+
+        // Fetch the count and percentage for each role
+        $results = User::select(
+            'role',
+            User::raw('COUNT(*) as count'),
+            User::raw('ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM users), 2) as percentage')
+        )
+            ->whereIn('role', $rolesOfInterest)
+            ->groupBy('role')
+            ->get();
+
+        $count = $results->pluck('count');
+        $roles = $results->pluck('role');
+        $percentage = $results;
+
+        return response()->json([
+            'count' => $count,
+            'roles' => $roles,
+            'percentage' => $percentage
         ]);
     }
 
