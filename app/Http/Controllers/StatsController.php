@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Association;
 use App\Models\Disease;
+use App\Models\Medics;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -68,13 +70,18 @@ class StatsController extends Controller
         ]);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function counts()
     {
-        //
+        $users = User::count();
+        $associations = Association::count();
+        $diseases = Disease::count();
+        $medics = Medics::count();
+        return response()->json([
+            'users' => $users,
+            'associations' => $associations,
+            'diseases' => $diseases,
+            'medics' => $medics
+        ]);
     }
 
     /**
