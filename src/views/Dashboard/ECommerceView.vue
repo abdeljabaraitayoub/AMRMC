@@ -4,7 +4,6 @@ import ChartOne from '@/components/Charts/ChartOne.vue'
 import ChartThree from '@/components/Charts/ChartThree.vue'
 import ChartTwo from '@/components/Charts/ChartTwo.vue'
 import ChatCard from '@/components/ChatCard.vue'
-import MapOne from '@/components/Maps/MapOne.vue'
 import TableOne from '@/components/Tables/TableOne.vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 </script>
@@ -16,31 +15,13 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
     </div>
 
     <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-      <!-- ====== Chart One Start -->
       <ChartOne />
-      <!-- ====== Chart One End -->
       <ChartThree />
-
-      <!-- ====== Chart Two Start -->
       <ChatCard />
       <ChartTwo />
-      <!-- ====== Chart Two End -->
-
-      <!-- ====== Chart Three Start -->
-      <!-- ====== Chart Three End -->
-
-      <!-- ====== Map One Start -->
-      <!-- <MapOne /> -->
-      <!-- ====== Map One End -->
-
-      <!-- ====== Table One Start -->
       <div class="col-span-12 xl:col-span-12">
         <TableOne />
       </div>
-      <!-- ====== Table One End -->
-
-      <!-- ====== Chat Card Start -->
-      <!-- ====== Chat Card End -->
     </div>
   </DefaultLayout>
 </template>
