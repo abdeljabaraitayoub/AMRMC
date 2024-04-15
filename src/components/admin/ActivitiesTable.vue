@@ -31,6 +31,27 @@ export default {
         this.packages = this.packages.filter((item) => item.id !== id)
       })
     }
+  },
+  computed: {
+    visiblePages() {
+      let min = this.page - 1
+      let max = this.page + 1
+
+      min = Math.max(min, 1) // Ensure the minimum is at least 1
+      max = Math.min(max, this.pages) // Ensure the maximum doesn't exceed the total pages
+
+      // Adjust the window if it's less than 3 pages
+      if (max - min < 2) {
+        if (min === 1) max = Math.min(3, this.pages)
+        else if (max === this.pages) min = Math.max(1, this.pages - 2)
+      }
+
+      const range = []
+      for (let i = min; i <= max; i++) {
+        range.push(i)
+      }
+      return range
+    }
   }
 }
 </script>
@@ -92,16 +113,16 @@ export default {
         <span class="font-semibold text-black dark:text-white">«</span>
       </button>
       <button
-        v-for="(item, index) in pages"
-        :key="index"
-        @click="page = index + 1"
+        v-for="num in visiblePages"
+        :key="num"
+        @click="page = num"
         class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
-        :class="{ 'opacity-50': page === index + 1 }"
+        :class="{ 'opacity-50': page === num }"
       >
-        <span class="text-black font-semibold dark:text-white">{{ index + 1 }}</span>
+        <span class="text-black font-semibold dark:text-white">{{ num }}</span>
       </button>
       <button
-        :disabled="page == pages"
+        :disabled="page >= pages"
         @click="page++"
         class="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row"
       >

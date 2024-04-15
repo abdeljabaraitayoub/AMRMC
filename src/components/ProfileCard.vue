@@ -4,7 +4,8 @@ import api from '@/stores/api.ts'
 export default {
   data() {
     return {
-      profile: {}
+      profile: {},
+      image: ''
     }
   },
   mounted() {
@@ -16,6 +17,23 @@ export default {
         .get('me')
         .then((response) => {
           this.profile = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    updateProfileImage(e) {
+      const file = e.target.files[0]
+      const formData = new FormData()
+      formData.append('image', file)
+      api
+        .post('/users/image', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((response) => {
+          this.profile.image = response.data.image
         })
         .catch((error) => {
           console.log(error)
@@ -71,10 +89,14 @@ export default {
     </div>
     <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
       <div
-        class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3"
+        class="relative z-30 mx-auto -mt-22 rounded-full bg-white/20 backdrop-blur sm:h-45 sm:max-w-45 flex items-center justify-center"
       >
-        <div class="relative drop-shadow-2">
-          <img :src="profile.image" alt="profile" class="rounded-full" />
+        <div class="relative flex items-center justify-center h-40 w-40 drop-shadow-2">
+          <img
+            :src="profile.image"
+            alt="profile"
+            class="h-40 my-auto mx-auto my-auto w-40 rounded-full"
+          />
           <label
             for="profile"
             class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
@@ -100,7 +122,13 @@ export default {
                 fill=""
               />
             </svg>
-            <input type="file" name="profile" id="profile" class="sr-only" />
+            <input
+              type="file"
+              name="profile"
+              id="profile"
+              class="sr-only"
+              @change="updateProfileImage"
+            />
           </label>
         </div>
       </div>
@@ -109,7 +137,7 @@ export default {
         <p class="font-medium">{{ profile.role }}</p>
         <p class="font-light">{{ profile.city }}</p>
         <div
-          v-show="true"
+          v-show="false"
           class="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-6 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]"
         >
           <div
@@ -153,3 +181,8 @@ export default {
   </div>
   <!-- ====== Profile Section End -->
 </template>
+<style scoped>
+img {
+  max-width: none;
+}
+</style>

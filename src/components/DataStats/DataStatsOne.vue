@@ -18,7 +18,7 @@ export default {
         },
         {
           icon: `<i class="bi bi-capsule"></i>`,
-          title: 'Total Admins'
+          title: 'Total medics'
         }
       ]
     }

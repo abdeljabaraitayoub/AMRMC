@@ -1,63 +1,81 @@
-<script setup lang="ts">
-import { computed, ref } from 'vue'
+<script>
+import api from '@/stores/api'
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+export default {
+  data() {
+    return {
+      days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      currentDate: new Date(
+        Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())
+      ),
+      eventsData: {}
+    }
+  },
+  computed: {
+    calendarDays() {
+      const year = this.currentDate.getUTCFullYear()
+      const month = this.currentDate.getUTCMonth()
+      const daysInMonth = this.getDaysInMonth(year, month)
+      const firstDayIndex = daysInMonth[0].getUTCDay()
 
-const currentDate = ref(new Date(2024, 12, 1))
+      const prevMonthDays = this.getDaysInMonth(year, month - 1)
+        .slice(-firstDayIndex)
+        .map((day) => ({ date: day, prevMonth: true, nextMonth: false }))
 
-const getDaysInMonth = (year: number, month: number): Date[] => {
-  const date = new Date(year, month, 1)
-  const days: Date[] = []
-  while (date.getMonth() === month) {
-    days.push(new Date(date))
-    date.setDate(date.getDate() + 1)
+      const currentMonthDays = daysInMonth.map((day) => ({
+        date: day,
+        prevMonth: false,
+        nextMonth: false
+      }))
+
+      const nextMonthDaysCount = 42 - currentMonthDays.length - prevMonthDays.length
+      const nextMonthDays = this.getDaysInMonth(year, month + 1)
+        .slice(0, nextMonthDaysCount)
+        .map((day) => ({ date: day, prevMonth: false, nextMonth: true }))
+
+      const allDays = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays]
+
+      return allDays.map((day) => {
+        const dayKey = day.date.toISOString().split('T')[0] // Format as 'YYYY-MM-DD'
+        const event = this.eventsData[dayKey]
+        return {
+          ...day,
+          isToday: this.isToday(day.date),
+          event
+        }
+      })
+    }
+  },
+  methods: {
+    getDaysInMonth(year, month) {
+      const date = new Date(Date.UTC(year, month, 1))
+      const days = []
+      while (date.getUTCMonth() === month) {
+        days.push(new Date(date))
+        date.setUTCDate(date.getUTCDate() + 1)
+      }
+      return days
+    },
+    isToday(date) {
+      const today = new Date(
+        Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())
+      )
+      return date.toISOString().split('T')[0] === today.toISOString().split('T')[0]
+    },
+    fetchEvents() {
+      api
+        .get('events')
+        .then((response) => {
+          this.eventsData = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  },
+  mounted() {
+    this.fetchEvents()
   }
-  return days
-}
-
-const calendarDays = computed(() => {
-  const year = currentDate.value.getFullYear()
-  const month = currentDate.value.getMonth()
-  const daysInMonth = getDaysInMonth(year, month)
-  const firstDayIndex = daysInMonth[0].getDay()
-
-  const prevMonthDays = getDaysInMonth(year, month - 1)
-    .slice(-firstDayIndex)
-    .map((day) => ({
-      date: day.getDate(),
-      prevMonth: true,
-      nextMonth: false,
-      isToday: isToday(day)
-    }))
-
-  const currentMonthDays = daysInMonth.map((day) => ({
-    date: day.getDate(),
-    prevMonth: false,
-    nextMonth: false,
-    isToday: isToday(day)
-  }))
-
-  const nextMonthDays = getDaysInMonth(year, month + 1)
-    .slice(0, 42 - currentMonthDays.length - prevMonthDays.length)
-    .map((day) => ({
-      date: day.getDate(),
-      prevMonth: false,
-      nextMonth: true,
-      isToday: isToday(day)
-    }))
-
-  return [...prevMonthDays, ...currentMonthDays, ...nextMonthDays].filter(
-    (day) => !day.prevMonth && !day.nextMonth
-  )
-})
-
-const isToday = (date: Date): boolean => {
-  const today = new Date()
-  return date.toDateString() === today.toDateString()
-}
-
-const isDateSelected = (day: any): boolean => {
-  return day.date === 1 && !day.prevMonth && !day.nextMonth
 }
 </script>
 
@@ -86,21 +104,18 @@ const isDateSelected = (day: any): boolean => {
         <div
           class="mx-auto flex h-24 w-10 flex-col overflow-hidden sm:w-full md:h-40 md:w-20 lg:w-28 2xl:w-40"
         >
-          <span class="font-medium text-black dark:text-white">{{ day.date }}</span>
+          <span class="font-medium text-black dark:text-white">{{ day.date.getDate() }}</span>
 
-          <div
-            v-if="isDateSelected(day)"
-            class="group h-16 w-full flex-grow cursor-pointer py-1 md:h-30"
-          >
+          <div v-if="day.event" class="group h-16 w-full flex-grow cursor-pointer py-1 md:h-30">
             <span class="group-hover:text-primary md:hidden"> More </span>
             <div
-              class="event invisible absolute left-2 z-99 mb-1 flex w-[200%] flex-col rounded-sm border-l-[3px] border-primary bg-gray px-3 py-1 text-left opacity-0 group-hover:visible group-hover:opacity-100 dark:bg-meta-4 md:visible md:w-[190%] md:opacity-100"
+              class="event invisible absolute left-2 z-99 mb-1 flex w-[90%] flex-col rounded-sm border-l-[3px] border-primary bg-gray px-3 py-1 text-left opacity-0 group-hover:visible group-hover:opacity-100 dark:bg-meta-4 md:visible md:opacity-100"
             >
               <span class="event-name text-sm font-semibold text-black dark:text-white">
-                Redesign Website
+                {{ day.event.name }}
               </span>
               <span class="time text-sm font-medium text-black dark:text-white">
-                1 Dec - 2 Dec
+                {{ day.event.startDate }} - {{ day.event.endDate }}
               </span>
             </div>
           </div>

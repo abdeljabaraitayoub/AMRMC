@@ -4,7 +4,7 @@ import { ref } from 'vue'
 
 const target = ref(null)
 const dropdownOpen = ref(false)
-const notifying = ref(true)
+const notifying = ref(false)
 
 onClickOutside(target, () => {
   dropdownOpen.value = false

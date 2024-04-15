@@ -4,7 +4,6 @@ import SigninView from '@/views/Authentication/SigninView.vue'
 import SignupView from '@/views/Authentication/SignupView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import BasicChartView from '@/views/Charts/BasicChartView.vue'
-import ECommerceView from '@/views/Dashboard/ECommerceView.vue'
 import FormElementsView from '@/views/Forms/FormElementsView.vue'
 import FormLayoutView from '@/views/Forms/FormLayoutView.vue'
 import SettingsView from '@/views/Pages/SettingsView.vue'
@@ -20,16 +19,10 @@ import ActivitiesView from '@/views/Admin/ActivitiesView.vue'
 import DiseaseView from '@/views/Admin/DiseaseView.vue'
 import MedicsView from '@/views/Admin/MedicsView.vue'
 import BackupView from '@/views/Admin/BackupView.vue'
+import DashboardView from '@/views/Admin/DashboardView.vue'
+
 
 const routes = [
-  {
-    path: '/',
-    name: 'eCommerce',
-    component: ECommerceView,
-    meta: {
-      title: 'eCommerce Dashboard'
-    }
-  },
   {
     path: '/calendar',
     name: 'calendar',
@@ -167,6 +160,14 @@ const routes = [
     meta: {
       title: 'backups'
     }
+  },
+  {
+    path: '/',
+    name: 'Dashboard',
+    component: DashboardView,
+    meta: {
+      title: 'Dashboard'
+    }
   }
 ]
 
@@ -179,7 +180,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = `Vue.js ${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
+  document.title = `${to.meta.title} | AMRMC`
   next()
 })
 
