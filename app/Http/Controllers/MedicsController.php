@@ -31,6 +31,11 @@ class MedicsController extends Controller
         $url = Storage::disk('medics')->url($name);
         $request->merge(['image' => $url]);
         $medics = Medics::create($request->all());
+        activity('create Medics')
+            ->performedOn($medics)
+            ->causedBy(auth()->user())
+            ->withProperties($request->all())
+            ->log('Medics created successfully');
         return response()->json(['url' => $url, 'medics' => $medics], 201);
     }
 
@@ -51,6 +56,11 @@ class MedicsController extends Controller
     {
         $medics = Medics::findOrFail($id);
         $medics->update($request->all());
+        activity('update Medics')
+            ->performedOn($medics)
+            ->causedBy(auth()->user())
+            ->withProperties($request->all())
+            ->log('Medics updated successfully');
         return response()->json($medics, 200);
     }
 
@@ -61,6 +71,11 @@ class MedicsController extends Controller
     {
         $medics = Medics::findOrFail($id);
         $medics->delete();
+        Storage::disk('medics')->delete($medics->image);
+        activity('delete Medics')
+            ->performedOn($medics)
+            ->causedBy(auth()->user())
+            ->log('Medics deleted successfully');
         return response()->json(['message' => 'Medics deleted successfully'], 200);
     }
 }

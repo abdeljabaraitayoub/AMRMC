@@ -32,4 +32,13 @@ class Association extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
     ];
+
+    public function agents()
+    {
+        return $this->hasMany(AssociationAgent::class);
+    }
+    public function patients()
+    {
+        return $this->hasMany(Patient::class);
+    }
 }

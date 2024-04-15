@@ -24,6 +24,7 @@ class MedicsFactory extends Factory
             'price' => $this->faker->randomFloat(2, 0, 1000),
             'description' => $this->faker->optional()->text,
             'image' => $this->faker->imageUrl(),
+            'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
         ];
     }
 }

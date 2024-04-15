@@ -22,6 +22,8 @@ class DiseaseFactory extends Factory
             'symptoms' => $this->faker->text,
             'causes' => $this->faker->text,
             'treatment' => $this->faker->text,
+            'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
+
         ];
     }
 }

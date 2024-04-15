@@ -27,6 +27,7 @@ class AssociationFactory extends Factory
             'description' => $this->faker->optional()->text,
             'objectives' => $this->faker->optional()->text,
             'activities' => $this->faker->optional()->text,
+            'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
         ];
     }
 }

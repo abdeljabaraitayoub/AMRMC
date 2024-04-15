@@ -32,7 +32,12 @@ Route::group([
 
 Route::apiResource('associations', 'App\Http\Controllers\AssociationController');
 Route::apiResource('agents', 'App\Http\Controllers\AssociationAgentController');
+
+
 Route::apiResource('users', 'App\Http\Controllers\UserController');
+Route::post('me/image', 'App\Http\Controllers\UserController@image');
+
+
 Route::apiResource('activities', 'App\Http\Controllers\ActivityLogController');
 
 Route::apiResource('diseases', 'App\Http\Controllers\DiseaseController');
@@ -40,7 +45,12 @@ Route::apiResource('patients', 'App\Http\Controllers\PatientController');
 
 Route::apiResource('medics', 'App\Http\Controllers\MedicsController');
 Route::apiResource('backup', 'App\Http\Controllers\BackupController');
+Route::apiResource('events', 'App\Http\Controllers\EventController');
+
+
+
 Route::get('stats/monthly-registrations', 'App\Http\Controllers\StatsController@monthlyRegistrations');
 Route::get('stats/patients-disease', 'App\Http\Controllers\StatsController@patients_disease');
 Route::get('stats/roles', 'App\Http\Controllers\StatsController@roles');
 Route::get('stats', 'App\Http\Controllers\StatsController@counts');
+Route::get('stats/associations', 'App\Http\Controllers\StatsController@associations');

@@ -82,7 +82,6 @@ class StatsController extends Controller
         $associationGrowthRate = $this->calculateGrowthRate(Association::class);
         $diseaseGrowthRate = $this->calculateGrowthRate(Disease::class);
         $medicsGrowthRate = $this->calculateGrowthRate(Medics::class);
-
         return response()->json([
             'users' => $users,
             'associations' => $associations,
@@ -104,17 +103,24 @@ class StatsController extends Controller
             ->whereBetween('created_at', [$lastMonthStart, $thisMonthEnd])
             ->groupBy('month')
             ->get();
-
         if ($countByMonth->count() == 2 && $countByMonth[0]['total'] > 0) {
-            return ($countByMonth[1]['total'] - $countByMonth[0]['total']) / $countByMonth[0]['total'];
+            $growthRate = (($countByMonth[1]['total'] - $countByMonth[0]['total']) / $countByMonth[0]['total']) * 100;
+            return number_format($growthRate, 2);
         }
     }
     /**
      * Display the specified resource.
      */
-    public function show(Patient $patient)
+    public function associations()
     {
-        //
+        $associations = Association::select('associations.*')
+            ->selectRaw('COUNT(associations.id) as patients_count')
+            ->join('patients', 'associations.id', '=', 'patients.association_id')
+            ->groupBy('associations.id')
+            ->orderByRaw('COUNT(associations.id) DESC')
+            ->limit(5)
+            ->get();
+        return response()->json($associations);
     }
 
     /**
