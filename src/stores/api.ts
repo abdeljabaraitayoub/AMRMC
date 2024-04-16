@@ -30,8 +30,8 @@ api.interceptors.response.use(
 api.interceptors.request.use(
   config => {
 
+    config.headers.Authorization ="Bearer " +import.meta.env.VITE_JWT_TOKEN
     if (localStorage.getItem("token")) {
-     config.headers.Authorization ="Bearer " +import.meta.env.VITE_JWT_TOKEN
     //  console.log('Token:', localStorage.getItem('token'))
       // config.headers.Authorization = `${localStorage.getItem("token")}`
     }

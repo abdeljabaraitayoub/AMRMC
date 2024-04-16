@@ -21,6 +21,10 @@ import MedicsView from '@/views/Admin/MedicsView.vue'
 import BackupView from '@/views/Admin/BackupView.vue'
 import DashboardView from '@/views/Admin/DashboardView.vue'
 
+//association route
+import PatientView from '@/views/Association/PatientView.vue'
+import AgentsView from '@/views/Association/AgentsView.vue'
+
 
 const routes = [
   {
@@ -167,6 +171,25 @@ const routes = [
     component: DashboardView,
     meta: {
       title: 'Dashboard'
+    }
+  }
+
+  //association route
+  ,
+  {
+    path: '/patients',
+    name: 'PatientView',
+    component: PatientView,
+    meta: {
+      title: 'Patients'
+    }
+  },
+  {
+    path: '/agents',
+    name: 'AgentsView',
+    component: AgentsView,
+    meta: {
+      title: 'Agents'
     }
   }
 ]
