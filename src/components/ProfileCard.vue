@@ -54,7 +54,7 @@ export default {
         alt="profile cover"
         class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
       />
-      <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
+      <div v-if="false" class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
         <label
           for="cover"
           class="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
@@ -168,11 +168,15 @@ export default {
         <div class="mt-6.5">
           <h4 class="mb-3.5 font-medium text-black dark:text-white">Contact on</h4>
           <div class="flex items-center justify-center gap-3.5">
-            <a href="#" class="hover:text-primary" name="social-icon" aria-label="social-icon"
+            <a
+              :href="'mailto:' + profile.email"
+              class="hover:text-primary"
+              name="social-icon"
+              aria-label="social-icon"
               ><i class="bi bi-envelope-at-fill"></i>
             </a>
-            <a href="#" class="hover:text-primary" name="social-icon" aria-label="social-icon">
-              <i class="bi bi-telephone-fill"></i>
+            <a class="hover:text-primary" name="social-icon" aria-label="social-icon">
+              <i class="bi bi-telephone-fill" :alt="profile.phone"></i>
             </a>
           </div>
         </div>
