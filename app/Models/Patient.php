@@ -16,4 +16,7 @@ class Patient extends Model
         'disease_id',
     ];
     public $timestamps = false;
+    protected $casts = [
+        'characteristics' => 'array',
+    ];
 }

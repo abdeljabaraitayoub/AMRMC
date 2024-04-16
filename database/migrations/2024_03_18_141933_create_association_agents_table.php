@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('association_id')->nullable()->constrained('associations')->onDelete('cascade');
             $table->enum('position', ['president', 'member'])->default('member');
             $table->text('bio')->nullable()->nullable();
-            $table->timestamps();
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
         });
     }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AssociationAgent extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $fillable = [
         'id',
         'association_id',

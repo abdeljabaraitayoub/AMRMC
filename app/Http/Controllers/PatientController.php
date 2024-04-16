@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
+use App\Models\AssociationAgent;
 use App\Models\Patient;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
@@ -14,11 +16,14 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return Patient::join('users', 'users.id', '=', 'patients.id')
-            ->join('associations', 'associations.id', '=', 'patients.id')
-            ->join('diseases', 'diseases.id', '=', 'patients.id')
+        DB::enableQueryLog();
+        $patients = Patient::join('users', 'users.id', '=', 'patients.id')
+            ->leftjoin('associations', 'associations.id', '=', 'patients.association_id')
+            ->leftjoin('diseases', 'diseases.id', '=', 'patients.association_id')
             ->select('patients.*', 'users.*', 'users.name as user_name', 'associations.name as association_name', 'diseases.name as disease_name')
             ->get();
+        // dd(DB::getQueryLog());
+        return $patients;
     }
 
 
@@ -28,7 +33,6 @@ class PatientController extends Controller
     public function store(StorePatientRequest $request)
     {
         $user = User::create($request->all());
-
         $request->merge(['id' => $user->id]);
         $patient = Patient::create($request->all());
         return response()->json($patient, 201);
@@ -70,5 +74,18 @@ class PatientController extends Controller
     public function destroy(Patient $patient)
     {
         //
+    }
+
+
+    public function getPatientByAssociation()
+    {
+        $user = auth()->user()->id;
+        $associationId = AssociationAgent::where('id', $user)->first()->association_id;
+        $patients = Patient::join('users', 'users.id', '=', 'patients.id')
+            ->leftjoin('diseases', 'diseases.id', '=', 'patients.association_id')
+            ->select('patients.*', 'users.*', 'users.name as user_name', 'diseases.name as disease_name')
+            ->where('patients.association_id', $associationId)
+            ->where('users.deleted_at', null)->paginate(5);
+        return $patients;
     }
 }

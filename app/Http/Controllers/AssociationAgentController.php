@@ -61,6 +61,18 @@ class AssociationAgentController extends Controller
         return response()->json($associationAgent, 200);
     }
 
+    public function getAgentsByAssociation()
+    {
+        $user = auth()->user()->id;
+        $associationId = AssociationAgent::where('id', $user)->first()->association_id;
+        $agents = AssociationAgent::join('associations', 'associations.id', '=', 'association_agents.association_id')
+            ->join('users', 'users.id', '=', 'association_agents.id')
+            ->where('association_agents.association_id', $associationId)
+            ->where('users.deleted_at', null)
+            ->where('users.id', '!=', $user)->paginate(5);
+        return $agents;
+    }
+
     /**
      * Remove the specified resource from storage.
      */

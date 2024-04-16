@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('medical_history')->nullable();
             $table->foreignId('association_id')->nullable()->constrained('associations')->onDelete('cascade');
             $table->foreignId('disease_id')->nullable()->constrained('diseases')->onDelete('cascade');
+            $table->jsonb('characteristics');
         });
     }
 

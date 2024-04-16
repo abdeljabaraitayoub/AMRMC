@@ -54,3 +54,8 @@ Route::get('stats/patients-disease', 'App\Http\Controllers\StatsController@patie
 Route::get('stats/roles', 'App\Http\Controllers\StatsController@roles');
 Route::get('stats', 'App\Http\Controllers\StatsController@counts');
 Route::get('stats/associations', 'App\Http\Controllers\StatsController@associations');
+
+
+//association agents routes
+Route::get('association-patients', 'App\Http\Controllers\PatientController@getPatientByAssociation');
+Route::get('association-agents', 'App\Http\Controllers\AssociationAgentController@getAgentsByAssociation');

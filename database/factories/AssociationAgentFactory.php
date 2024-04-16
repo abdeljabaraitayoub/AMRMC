@@ -18,6 +18,10 @@ class AssociationAgentFactory extends Factory
     {
         return [
             //
+            'id' => \App\Models\User::factory(),
+            'association_id' => $this->faker->numberBetween(1, 10),
+            'position' => $this->faker->randomElement(['president', 'member']),
+            'bio' => $this->faker->text,
         ];
     }
 }
