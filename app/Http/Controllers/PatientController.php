@@ -32,9 +32,12 @@ class PatientController extends Controller
      */
     public function store(StorePatientRequest $request)
     {
+        DB::enableQueryLog();
         $user = User::create($request->all());
         $request->merge(['id' => $user->id]);
+        // dd($request->all());
         $patient = Patient::create($request->all());
+        dd(DB::getQueryLog());
         return response()->json($patient, 201);
     }
 

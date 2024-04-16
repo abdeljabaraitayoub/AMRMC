@@ -14,6 +14,7 @@ class Patient extends Model
         'medical_history',
         'association_id',
         'disease_id',
+        'characteristics',
     ];
     public $timestamps = false;
     protected $casts = [

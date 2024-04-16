@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->unsignedBigInteger('id'); // Use the same type as the 'users' id column
-            $table->primary('id'); // Set 'id' as the primary key
+            $table->unsignedBigInteger('id');
+            $table->primary('id');
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->string('medical_record_number')->unique();
             $table->text('medical_history')->nullable();
