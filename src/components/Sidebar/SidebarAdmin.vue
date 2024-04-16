@@ -78,6 +78,12 @@ const menuGroups = ref([
         // children: [{ label: 'Settings', route: '/pages/settings' }]
       },
       {
+        icon: `<i class="bi bi-database-gear"></i>`,
+        label: 'Backup',
+        route: '/backups'
+        // children: [{ label: 'Settings', route: '/pages/settings' }]
+      },
+      {
         icon: `<svg
                   class="fill-current"
                   width="18"

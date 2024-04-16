@@ -23,17 +23,17 @@ export default {
         })
     },
     updateProfileImage(e) {
-      const file = e.target.files[0]
+      const img = e.target.files[0]
       const formData = new FormData()
-      formData.append('image', file)
+      formData.append('img', img)
       api
-        .post('/users/image', formData, {
+        .post('me/image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
         .then((response) => {
-          this.profile.image = response.data.image
+          this.getProfile()
         })
         .catch((error) => {
           console.log(error)
