@@ -32,7 +32,7 @@ class BackupController extends Controller
     public function store(Request $request)
     {
         $artisan = Artisan::call('backup:run');
-        dd($artisan);
+        return response()->json(['message' => 'Backup created successfully']);
     }
 
     /**
