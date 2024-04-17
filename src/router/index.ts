@@ -24,6 +24,7 @@ import DashboardView from '@/views/Admin/DashboardView.vue'
 //association route
 import PatientView from '@/views/Association/PatientView.vue'
 import AgentsView from '@/views/Association/AgentsView.vue'
+import AssociationSettingsView from '@/views/Association/SettingsView.vue'
 
 
 const routes = [
@@ -190,6 +191,14 @@ const routes = [
     component: AgentsView,
     meta: {
       title: 'Agents'
+    }
+  },
+  {
+    path: '/association/settings',
+    name: 'SettingsView',
+    component: AssociationSettingsView,
+    meta: {
+      title: 'Association | Settings'
     }
   }
 ]
