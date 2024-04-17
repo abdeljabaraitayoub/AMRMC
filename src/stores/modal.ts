@@ -23,6 +23,7 @@ export const useModalStore = defineStore('modal', {
     },
     setUpdate() {
       this.updated += 1;
+      console.log('updated', this.updated);
     },
   },
 });

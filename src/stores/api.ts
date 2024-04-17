@@ -31,7 +31,7 @@ api.interceptors.response.use(
     return response
   },
   error => {
-    if (error.response.data.message.search('SQLSTATE') == -1) {
+    if (error.response.status === 422) {
       useToast().error(error.response.data.message);
     }
     else{

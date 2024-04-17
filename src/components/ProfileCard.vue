@@ -59,7 +59,6 @@ export default {
     <div class="relative z-20 h-35 md:h-65">
       <img
         src="@/assets/images/cover/cover-01.png"
-        alt="profile cover"
         class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
       />
       <div v-if="false" class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
@@ -104,7 +103,7 @@ export default {
           <img
             v-if="!loading"
             :src="profile.image"
-            alt="profile"
+            loading="lazy"
             class="h-40 my-auto mx-auto my-auto w-40 rounded-full"
           />
           <label
