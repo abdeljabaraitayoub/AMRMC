@@ -61,3 +61,4 @@ Route::get('association-patients', 'App\Http\Controllers\PatientController@getPa
 Route::get('association-agents', 'App\Http\Controllers\AssociationAgentController@getAgentsByAssociation');
 Route::put('association/current', 'App\Http\Controllers\AssociationController@updateCurrentAssociation');
 Route::get('association/current', 'App\Http\Controllers\AssociationController@getCurrentAssociation');
+Route::post('association/image', 'App\Http\Controllers\AssociationController@image');

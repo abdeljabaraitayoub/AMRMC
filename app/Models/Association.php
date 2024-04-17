@@ -20,7 +20,8 @@ class Association extends Model
         'website',
         'description',
         'objectives',
-        'activities'
+        'activities',
+        'image'
     ];
     protected $hidden = [
         'created_at',

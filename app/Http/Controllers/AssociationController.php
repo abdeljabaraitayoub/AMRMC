@@ -8,11 +8,12 @@ use App\Models\Association;
 use App\Models\AssociationAgent;
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendPassword;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class AssociationController extends Controller
 {
@@ -98,8 +99,16 @@ class AssociationController extends Controller
 
     public function image(Request $request)
     {
-        $user = auth()->user();
-        $user->update($request->all());
-        return response()->json($user, 200);
+        $association = $this->getCurrentAssociation();
+        $file = $request->file('image');
+        $name = $request->name;
+        $filename = $file->hashName();
+        $path = $name . '/' . 'Avatar' . $filename;
+        $image = Image::make($file)->fit(256, 256)->encode('jpg', 40);
+        Storage::disk('Associations')->put($path, (string) $image);
+        $url = Storage::disk('Associations')->url($path);
+        $association->image = $url;
+        $association->save();
+        return response()->json($association, 200);
     }
 }
