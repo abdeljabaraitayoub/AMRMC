@@ -29,7 +29,6 @@ export default {
       api
         .post(this.entity, this.modalStore.data)
         .then((response) => {
-          alert(response.data.message)
           this.closeModal()
           this.modalStore.setUpdate()
         })
@@ -41,7 +40,6 @@ export default {
       api
         .put(`${this.entity}/${this.modalStore.data.id}`, this.modalStore.data)
         .then((response) => {
-          alert(response.data.message)
           this.closeModal()
           this.modalStore.setUpdate()
         })
@@ -58,7 +56,7 @@ export default {
     <div
       v-if="modalStore.show"
       class="overflow-y-auto fixed inset-0 justify-center items-center flex backdrop-blur-sm"
-      style="z-index: 999999"
+      style="z-index: 999"
     >
       <div class="my-auto mx-auto w-2/4">
         <!--content-->

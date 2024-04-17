@@ -1,11 +1,16 @@
 <script>
 import api from '@/stores/api.ts'
+import LoaderLoop from './LoaderLoop.vue'
 
 export default {
+  components: {
+    LoaderLoop
+  },
   data() {
     return {
       profile: {},
-      image: ''
+      image: '',
+      loading: false
     }
   },
   mounted() {
@@ -13,10 +18,12 @@ export default {
   },
   methods: {
     getProfile() {
+      this.loading = true
       api
         .get('me')
         .then((response) => {
           this.profile = response.data
+          this.loading = false
         })
         .catch((error) => {
           console.log(error)
@@ -25,6 +32,7 @@ export default {
     updateProfileImage(e) {
       const img = e.target.files[0]
       const formData = new FormData()
+      this.loading = true
       formData.append('img', img)
       api
         .post('me/image', formData, {
@@ -36,7 +44,7 @@ export default {
           this.getProfile()
         })
         .catch((error) => {
-          console.log(error)
+          this.loading = false
         })
     }
   }
@@ -92,12 +100,15 @@ export default {
         class="relative z-30 mx-auto -mt-22 rounded-full bg-white/20 backdrop-blur sm:h-45 sm:max-w-45 flex items-center justify-center"
       >
         <div class="relative flex items-center justify-center h-40 w-40 drop-shadow-2">
+          <LoaderLoop v-if="loading" />
           <img
+            v-if="!loading"
             :src="profile.image"
             alt="profile"
             class="h-40 my-auto mx-auto my-auto w-40 rounded-full"
           />
           <label
+            v-if="!loading"
             for="profile"
             class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
           >
@@ -124,6 +135,7 @@ export default {
             </svg>
             <input
               type="file"
+              accept="image/*"
               name="profile"
               id="profile"
               class="sr-only"

@@ -1,5 +1,6 @@
 import router from "@/router"
 import axios from "axios"
+import { useToast } from 'vue-toast-notification';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -17,9 +18,18 @@ api.interceptors.request.use(request => {
 api.interceptors.response.use(
   response => {
     console.log("Response:", response)
+    if (response.data.message) {
+    useToast().success(response.data.message);
+    }
     return response
   },
   error => {
+    // if (error.response.data.message){
+    //   useToast().error(error.response.data.message);
+    // }else{
+      useToast().error('An error occurred');
+    // }
+
     if (error.response.status === 401 || error.response.status === 403) {
       router.push("/login")
     }

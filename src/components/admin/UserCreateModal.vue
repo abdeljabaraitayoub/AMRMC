@@ -51,7 +51,6 @@ export default {
           }
         })
         .then((response) => {
-          alert(response.data.message)
           this.closeModal()
         })
         .catch((error) => {
@@ -72,7 +71,6 @@ export default {
       api
         .put(`${this.entity}/${this.modalStore.data.id}`, this.modalStore.data, {})
         .then((response) => {
-          alert(response.data.message)
           this.closeModal()
         })
     }

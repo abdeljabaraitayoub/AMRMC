@@ -1,9 +1,15 @@
 <script>
 import api from '@/stores/api'
+import LoaderLoop from '../LoaderLoop.vue'
 export default {
+  components: {
+    LoaderLoop
+  },
   data() {
     return {
-      data: {}
+      data: {},
+      file: null,
+      loading: false
     }
   },
   methods: {
@@ -11,10 +17,38 @@ export default {
       api.get(`association/current`).then((response) => {
         this.data = response.data
       })
+    },
+    update() {
+      api
+        .put(`association/current`, this.data)
+        .then((response) => {})
+        .catch((error) => {})
+    },
+    handleimageupload(e) {
+      this.file = e.target.files[0]
+      const formData = new FormData()
+      formData.append('image', this.file)
+      this.loading = true
+      api
+        .post(`association/image`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((response) => {
+          this.data.image = URL.createObjectURL(this.file)
+          this.$toast.success('Image uploaded successfully!')
+          this.loading = false
+        })
+        .catch((error) => {
+          console.error('Error uploading image:', error)
+          this.loading = false
+        })
     }
   },
   mounted() {
     this.fetchdata()
+    // this.$toast.error('Association updated successfully')
   }
 }
 </script>
@@ -205,6 +239,19 @@ AUXILIAIRES"
                 ></textarea>
               </div>
             </div>
+            <div class="flex justify-end gap-4.5">
+              <button
+                class="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+              >
+                Cancel</button
+              ><button
+                @click="update"
+                class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                type="button"
+              >
+                Save
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -229,17 +276,22 @@ AUXILIAIRES"
                 <span class="mb-1.5 font-medium text-black dark:text-white">Edit your photo</span>
                 <span class="flex gap-2.5">
                   <button class="text-sm font-medium hover:text-primary">Delete</button>
-                  <button class="text-sm font-medium hover:text-primary">Update</button>
                 </span>
               </div>
             </div>
 
+            <LoaderLoop
+              class="relative my-auto mx-auto mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
+              v-if="loading"
+            />
             <!-- File Upload Section -->
             <div
+              v-if="!loading"
               id="FileUpload"
               class="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
             >
               <input
+                @change="handleimageupload"
                 type="file"
                 accept="image/*"
                 class="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
@@ -281,22 +333,6 @@ AUXILIAIRES"
                 <p class="mt-1.5 text-sm font-medium">SVG, PNG, JPG or GIF</p>
                 <p class="text-sm font-medium">(max, 800 X 800px)</p>
               </div>
-            </div>
-
-            <!-- Save and Cancel Buttons for Photo Section -->
-            <div class="flex justify-end gap-4.5">
-              <button
-                class="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                type="button"
-              >
-                Cancel
-              </button>
-              <button
-                class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
-                type="submit"
-              >
-                Save
-              </button>
             </div>
           </form>
         </div>

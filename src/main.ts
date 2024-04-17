@@ -1,20 +1,24 @@
-import './assets/css/satoshi.css'
-import './assets/css/style.css'
-import 'jsvectormap/dist/css/jsvectormap.min.css'
-import 'flatpickr/dist/flatpickr.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import 'bootstrap-icons/font/bootstrap-icons';
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import VueApexCharts from 'vue3-apexcharts'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import VueApexCharts from 'vue3-apexcharts';
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
+import App from './App.vue';
+import router from './router';
 
-import App from './App.vue'
-import router from './router'
+// CSS imports
+import './assets/css/satoshi.css';
+import './assets/css/style.css';
+import 'jsvectormap/dist/css/jsvectormap.min.css';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
-app.use(VueApexCharts)
+// Using plugins with the Vue 3 application instance
+app.use(createPinia());
+app.use(router);
+app.use(ToastPlugin);
+app.use(VueApexCharts);
 
-app.mount('#app')
+app.mount('#app');

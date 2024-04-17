@@ -45,7 +45,6 @@ export default {
           }
         })
         .then((response) => {
-          alert(response.data.message)
           this.modalStore.setUpdate()
           this.closeModal()
         })
@@ -67,7 +66,6 @@ export default {
       api
         .put(`${this.entity}/${this.modalStore.data.id}`, this.modalStore.data, {})
         .then((response) => {
-          alert(response.data.message)
           this.closeModal()
           this.modalStore.setUpdate()
         })
