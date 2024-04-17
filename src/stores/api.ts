@@ -11,24 +11,32 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(request => {
-  console.log("Starting Request", request)
+  // console.log("Starting Request", request)
   return request
 })
 
 api.interceptors.response.use(
   response => {
-    console.log("Response:", response)
+    // console.log("Response:", response)
+  
     if (response.data.message) {
-    useToast().success(response.data.message);
+      if(response.status == 200){
+        useToast().success(response.data.message);
+      }else if(response.status == 201){
+        useToast().success(response.data.message);
+      }else if(response.status == 204){
+        useToast().warning(response.data.message);
+      }
     }
     return response
   },
   error => {
-    // if (error.response.data.message){
-    //   useToast().error(error.response.data.message);
-    // }else{
+    if (error.response.data.message.search('SQLSTATE') == -1) {
+      useToast().error(error.response.data.message);
+    }
+    else{
       useToast().error('An error occurred');
-    // }
+    }
 
     if (error.response.status === 401 || error.response.status === 403) {
       router.push("/login")

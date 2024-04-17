@@ -37,7 +37,6 @@ export default {
         })
         .then((response) => {
           this.data.image = URL.createObjectURL(this.file)
-          this.$toast.success('Image uploaded successfully!')
           this.loading = false
         })
         .catch((error) => {
