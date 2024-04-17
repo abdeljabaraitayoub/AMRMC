@@ -50,7 +50,7 @@ class UserController extends Controller
             ->causedBy(Auth::user())
             ->withProperties($request->all())
             ->log('User created successfully');
-        return response()->json($user, 201);
+        return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
     }
 
     /**
@@ -91,14 +91,12 @@ class UserController extends Controller
     public function image(Request $request)
     {
         $user = Auth::user();
-        $user = User::find($user->id);
         $file = $request->file('img');
-        $name = $request->name;
+        $name = $user->name;
         $filename = $file->hashName();
         $path = $name . '/' . 'Avatar' . $filename;
         $image = Image::make($file)->fit(256, 256)->encode('jpg', 40);
         Storage::disk('Users')->put($path, (string) $image);
-        // Storage::disk('Users')->put($path, file_get_contents($file));
         $url = Storage::disk('Users')->url($path);
         $request->merge(['image' => $url]);
         $user->update($request->all());
@@ -107,6 +105,6 @@ class UserController extends Controller
             ->causedBy(Auth::user())
             ->withProperties($request->all())
             ->log('User updated successfully');
-        return response()->json(['message' => 'User updated successfully'], 200);
+        return response()->json(['message' => 'image updated succesfully !'], 200);
     }
 }

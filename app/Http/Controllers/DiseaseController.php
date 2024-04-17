@@ -31,7 +31,7 @@ class DiseaseController extends Controller
             ->causedBy(auth()->user())
             ->withProperties($request->all())
             ->log('Disease created successfully');
-        return response()->json($disease, 201);
+        return response()->json(['message' => 'Disease created successfully', 'disease' => $disease], 201);
     }
 
     /**
@@ -54,7 +54,7 @@ class DiseaseController extends Controller
             ->causedBy(auth()->user())
             ->withProperties($request->all())
             ->log('Disease updated successfully');
-        return response()->json($disease, 200);
+        return response()->json(['message' => 'Disease updated successfully', 'disease' => $disease], 200);
     }
 
     /**

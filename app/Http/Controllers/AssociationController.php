@@ -111,4 +111,13 @@ class AssociationController extends Controller
         $association->save();
         return response()->json($association, 200);
     }
+
+    public function destroyimage()
+    {
+        Storage::disk('Associations')->delete($this->getCurrentAssociation()->image);
+        $association = $this->getCurrentAssociation();
+        $association->image = null;
+        $association->save();
+        return response()->json($association, 200);
+    }
 }
