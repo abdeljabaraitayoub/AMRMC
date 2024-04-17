@@ -59,3 +59,5 @@ Route::get('stats/associations', 'App\Http\Controllers\StatsController@associati
 //association agents routes
 Route::get('association-patients', 'App\Http\Controllers\PatientController@getPatientByAssociation');
 Route::get('association-agents', 'App\Http\Controllers\AssociationAgentController@getAgentsByAssociation');
+Route::put('association/current', 'App\Http\Controllers\AssociationController@updateCurrentAssociation');
+Route::get('association/current', 'App\Http\Controllers\AssociationController@getCurrentAssociation');

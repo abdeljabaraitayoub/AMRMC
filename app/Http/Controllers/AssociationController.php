@@ -7,7 +7,8 @@ use App\Http\Requests\UpdateAssociationRequest;
 use App\Models\Association;
 use App\Models\AssociationAgent;
 use App\Models\User;
-use AWS\CRT\HTTP\Request;
+use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
@@ -76,5 +77,29 @@ class AssociationController extends Controller
     {
         $association->delete();
         return response()->json(['message' => 'Association deleted successfully', 'query' => DB::getQueryLog()], 200);
+    }
+
+
+    public function updateCurrentAssociation(Request $request)
+    {
+        $association = $this->getCurrentAssociation();
+        $association->update($request->all());
+        return response()->json($association, 200);
+    }
+
+
+    public function getCurrentAssociation()
+    {
+        $user = auth()->user();
+        $user = AssociationAgent::where('id', $user->id)->first();
+        $association = Association::find($user->association_id);
+        return $association;
+    }
+
+    public function image(Request $request)
+    {
+        $user = auth()->user();
+        $user->update($request->all());
+        return response()->json($user, 200);
     }
 }

@@ -24,10 +24,11 @@ class AssociationFactory extends Factory
             'city' => $this->faker->city,
             'country' => 'Morocco', // default value
             'website' => $this->faker->optional()->url,
-            'description' => $this->faker->optional()->text,
-            'objectives' => $this->faker->optional()->text,
-            'activities' => $this->faker->optional()->text,
+            'description' => $this->faker->text,
+            'objectives' => $this->faker->text,
+            'activities' => $this->faker->text,
             'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'image' => $this->faker->imageUrl(),
         ];
     }
 }

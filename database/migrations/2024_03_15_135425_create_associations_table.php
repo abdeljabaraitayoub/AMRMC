@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('objectives')->nullable();
             $table->text('activities')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
