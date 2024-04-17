@@ -22,9 +22,6 @@ class AssociationController extends Controller
      */
     public function index()
     {
-
-        DB::enableQueryLog();
-
         $associations = Association::orderBy('id', 'asc')->paginate(5);
         return $associations;
     }
@@ -50,7 +47,7 @@ class AssociationController extends Controller
         $association_agent = AssociationAgent::create($request->all());
         Mail::to($association->email)->send(new SendPassword($user->email, $password));
 
-        return response()->json(['association' => $association, 'user' => $user, 'password' => $password, 'agent' => $association_agent], 201);
+        return response()->json(['message' => 'association created succesfully', 'association' => $association], 201);
     }
 
     /**
@@ -68,7 +65,7 @@ class AssociationController extends Controller
     public function update(UpdateAssociationRequest $request, Association $association)
     {
         $association->update($request->all());
-        return response()->json($association, 200);
+        return response()->json(['message' => 'association updated succesfully', 'association' => $association], 200);
     }
 
     /**
@@ -85,7 +82,8 @@ class AssociationController extends Controller
     {
         $association = $this->getCurrentAssociation();
         $association->update($request->all());
-        return response()->json($association, 200);
+
+        return response()->json(['message' => 'association updated succesfully', 'association' => $association], 200);
     }
 
 
@@ -109,7 +107,7 @@ class AssociationController extends Controller
         $url = Storage::disk('Associations')->url($path);
         $association->image = $url;
         $association->save();
-        return response()->json($association, 200);
+        return response()->json(['message' => 'image updated succesfully', 'association' => $association], 200);
     }
 
     public function destroyimage()
@@ -118,6 +116,6 @@ class AssociationController extends Controller
         $association = $this->getCurrentAssociation();
         $association->image = null;
         $association->save();
-        return response()->json($association, 200);
+        return response()->json(['message' => 'Association deleted successfully', 'association' => $association], 204);
     }
 }
