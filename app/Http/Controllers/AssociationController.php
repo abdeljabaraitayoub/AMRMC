@@ -107,7 +107,7 @@ class AssociationController extends Controller
         $url = Storage::disk('Associations')->url($path);
         $association->image = $url;
         $association->save();
-        return response()->json(['message' => 'image updated succesfully', 'association' => $association], 200);
+        return response()->json(['message' => 'Image uploaded successfully!', 'association' => $association], 200);
     }
 
     public function destroyimage()
