@@ -35,7 +35,8 @@ Route::apiResource('agents', 'App\Http\Controllers\AssociationAgentController');
 
 
 Route::apiResource('users', 'App\Http\Controllers\UserController');
-Route::post('me/image', 'App\Http\Controllers\UserController@image');
+Route::post('me/image', 'App\Http\Controllers\UserController@myimage');
+Route::post('image/{user}', 'App\Http\Controllers\UserController@image');
 
 
 Route::apiResource('activities', 'App\Http\Controllers\ActivityLogController');
@@ -62,3 +63,5 @@ Route::get('association-agents', 'App\Http\Controllers\AssociationAgentControlle
 Route::put('association/current', 'App\Http\Controllers\AssociationController@updateCurrentAssociation');
 Route::get('association/current', 'App\Http\Controllers\AssociationController@getCurrentAssociation');
 Route::post('association/image', 'App\Http\Controllers\AssociationController@image');
+
+Route::get('activity/association', 'App\Http\Controllers\ActivityLogController@getactivityperassociation');

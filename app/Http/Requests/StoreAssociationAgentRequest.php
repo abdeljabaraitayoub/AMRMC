@@ -22,7 +22,12 @@ class StoreAssociationAgentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|max:255|unique:users',
+            'date_of_birth' => 'required|date_format:Y-m-d|before:today',
+            'address' => 'sometimes|nullable|string|max:255',
+            'position' => 'required|string|max:255',
         ];
     }
 }

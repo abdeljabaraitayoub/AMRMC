@@ -11,8 +11,19 @@ class AssociationAgent extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'association_id',
         'position',
-        'bio'
+        'bio',
+        'association_id',
+
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    public function association()
+    {
+        return $this->belongsTo(Association::class, 'association_id');
+    }
 }

@@ -36,7 +36,7 @@ class ActivityLogController extends Controller
     {
         DB::enableQueryLog();
         $Activity = Activity::with('causer')->where('causer_id', $id)->get();
-        return response()->json($Activity, 200);
+        return ActivityResource::collection($Activity);
     }
 
     /**
@@ -53,5 +53,17 @@ class ActivityLogController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function getactivityperassociation()
+    {
+        $association = AssociationController::getCurrentAssociation();
+        $activityLogs = Activity::select('activity_log.*', 'users.*', 'association_agents.position')
+            ->join('users', 'activity_log.causer_id', '=', 'users.id')
+            ->join('association_agents', 'users.id', '=', 'association_agents.id')
+            ->where('association_agents.association_id', '=', $association->id)
+            ->paginate(5);
+        return ActivityResource::collection($activityLogs);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDiseaseRequest;
 use App\Http\Requests\UpdateDiseaseRequest;
 use App\Models\Disease;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DiseaseController extends Controller
@@ -12,10 +13,14 @@ class DiseaseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $diseases = Disease::withCount('patients')
-            ->paginate(5);
+        $query = Disease::query();
+        if ($request->has('all') && $request->get('all') == 'true') {
+            $diseases = $query->get();
+        } else {
+            $diseases = $query->paginate(5);
+        }
         return $diseases;
     }
 

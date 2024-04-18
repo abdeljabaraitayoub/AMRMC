@@ -25,18 +25,22 @@ class MedicsController extends Controller
      */
     public function store(StoreMedicsRequest $request)
     {
-        $file = $request->file('file');
         $name = $request->name;
-        Storage::disk('medics')->put($name, file_get_contents($file));
-        $url = Storage::disk('medics')->url($name);
-        $request->merge(['image' => $url]);
+        if ($request->file('file')) {
+            $file = $request->file('file');
+            $filename = $file->hashName();
+            $name = $name . '/'  . $filename;
+            Storage::disk('medics')->put($name, file_get_contents($file));
+            $url = Storage::disk('medics')->url($name);
+            $request->merge(['image' => $url]);
+        }
         $medics = Medics::create($request->all());
         activity('create Medics')
             ->performedOn($medics)
             ->causedBy(auth()->user())
             ->withProperties($request->all())
             ->log('Medics created successfully');
-        return response()->json(['url' => $url, 'medics' => $medics], 201);
+        return response()->json(['medics' => $medics], 201);
     }
 
     /**
@@ -55,7 +59,7 @@ class MedicsController extends Controller
     public function update(UpdateMedicsRequest $request, $id)
     {
         $medics = Medics::findOrFail($id);
-        $medics->update($request->all());
+        $medics->update($request->except('file'));
         activity('update Medics')
             ->performedOn($medics)
             ->causedBy(auth()->user())
@@ -71,7 +75,6 @@ class MedicsController extends Controller
     {
         $medics = Medics::findOrFail($id);
         $medics->delete();
-        Storage::disk('medics')->delete($medics->image);
         activity('delete Medics')
             ->performedOn($medics)
             ->causedBy(auth()->user())

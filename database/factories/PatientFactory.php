@@ -17,10 +17,11 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => \App\Models\User::factory(),
+            'id' => \App\Models\User::factory()->patient(),
             'medical_record_number' => $this->faker->unique()->numerify('MRN-########'),
             'medical_history' => $this->faker->text,
-            'association_id' => $this->faker->optional()->numberBetween(1, 10),
+            // 'association_id' => $this->faker->numberBetween(1, 10),
+            'association_id' => 1,
             'disease_id' => $this->faker->numberBetween(1, 10),
             'characteristics' => [
                 'age' => $this->faker->numberBetween(1, 100),

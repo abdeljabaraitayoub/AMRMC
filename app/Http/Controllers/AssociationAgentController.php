@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAssociationAgentRequest;
 use App\Http\Requests\UpdateAssociationAgentRequest;
+use App\Models\Association;
 use App\Models\AssociationAgent;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Str;
+use App\Mail\SendPassword;
+use Illuminate\Support\Facades\Mail;
 
 class AssociationAgentController extends Controller
 {
@@ -26,10 +31,21 @@ class AssociationAgentController extends Controller
      */
     public function store(StoreAssociationAgentRequest $request)
     {
+        $password = str::random(8);
+        $association = $this->getAssociation();
+        $role = 'association_agent';
+        $request->merge(['password' => $password, 'city' => $association->city, 'role' => $role, 'image' => $association->image]);
         $user = User::create($request->all());
-        $request->merge(['id' => $user->id]);
+        $request->merge(['id' => $user->id, 'association_id' => $association->id,  'country' => $association->country]);
         $associationAgent = AssociationAgent::create($request->all());
-        return response()->json($associationAgent, 201);
+        mail::to($request->email)->send(new SendPassword($request->email, $password));
+
+        activity('create Association Agent')
+            ->performedOn($associationAgent)
+            ->causedBy(auth()->user())
+            ->withProperties($request->all())
+            ->log('Association Agent created successfully');
+        return response()->json(["message" => "agent is created succefully !", 'agent' => $associationAgent], 201);
     }
 
     /**
@@ -58,20 +74,37 @@ class AssociationAgentController extends Controller
             $user->update($request->only(['name', 'email', 'phone', 'date_of_birth', 'country', 'city', 'address']));
         }
         $associationAgent->update($request->only(['association_id', 'position', 'bio']));
-        return response()->json($associationAgent, 200);
+        activity('update Association Agent')
+            ->performedOn($associationAgent)
+            ->causedBy(auth()->user())
+            ->withProperties($request->all())
+            ->log('Association Agent updated successfully');
+        return response()->json(["message" => "agent is updated succefully !", 'agent' => $associationAgent], 200);
     }
 
     public function getAgentsByAssociation()
     {
-        $user = auth()->user()->id;
-        $associationId = AssociationAgent::where('id', $user)->first()->association_id;
+        $user = auth()->user();
+        $association = $this->getAssociation();
         $agents = AssociationAgent::join('associations', 'associations.id', '=', 'association_agents.association_id')
             ->join('users', 'users.id', '=', 'association_agents.id')
-            ->where('association_agents.association_id', $associationId)
-            ->where('users.deleted_at', null)
-            ->where('users.id', '!=', $user)->paginate(5);
+            ->where('association_agents.association_id', $association->id)
+            ->whereNull('associations.deleted_at')
+            ->whereNull('users.deleted_at')
+            ->where('users.id', '!=', $user->id)
+            ->paginate(5);
         return $agents;
     }
+
+    public function getAssociation()
+    {
+        $user = auth()->user();
+        $user = AssociationAgent::where('id', $user->id)->first();
+        $association = Association::find($user->association_id);
+
+        return $association;
+    }
+
 
     /**
      * Remove the specified resource from storage.

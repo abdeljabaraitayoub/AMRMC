@@ -22,6 +22,12 @@ class StoreMedicsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'dosage_form' => 'required|string|max:255',
+            'manufacturer' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'string',
             //
         ];
     }

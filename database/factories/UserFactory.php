@@ -31,8 +31,9 @@ class UserFactory extends Factory
             'country' => fake()->country(),
             'city' => fake()->city(),
             'address' => fake()->address(),
-            'role' => fake()->randomElement(['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']),
+            // 'role' => fake()->randomElement(['admin', 'doctor', 'patient', 'association_agent', 'pharmacist', 'lab_technician', 'analyst']),
             // 'role' => fake()->randomElement(['admin']),
+            'role' => 'patient',
             'password' => static::$password ??= Hash::make('password'),
             'image' => fake()->imageUrl(),
             'created_at' => fake()->dateTimeBetween('-4 month', '+8 month'),
@@ -46,6 +47,41 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the model's role should be admin.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function admin()
+    {
+        return $this->state([
+            'role' => 'admin',
+        ]);
+    }
+
+    /**
+     * Indicate that the model's role should be patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function patient()
+    {
+        return $this->state([
+            'role' => 'patient',
+        ]);
+    }
+    /**
+     * Indicate that the model's role should be agent.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function agent()
+    {
+        return $this->state([
+            'role' => 'association_agent',
         ]);
     }
 }

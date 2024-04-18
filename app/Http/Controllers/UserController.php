@@ -38,13 +38,16 @@ class UserController extends Controller
         $path = $name . '/' . 'Avatar' . $filename;
         $image = Image::make($file)->fit(256, 256)->encode('jpg', 40);
         Storage::disk('Users')->put($path, (string) $image);
-        // Storage::disk('Users')->put($path, file_get_contents($file));
         $url = Storage::disk('Users')->url($path);
         $request->merge(['image' => $url]);
+
+
         $password = str::random(8);
         $request->merge(['password' => $password]);
         mail::to($request->email)->send(new SendPassword($request->email, $password));
         $user = User::create($request->all());
+
+
         activity('create User')
             ->performedOn($user)
             ->causedBy(Auth::user())
@@ -88,9 +91,12 @@ class UserController extends Controller
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
 
-    public function image(Request $request)
+    public function myimage(Request $request)
     {
         $user = Auth::user();
+        $request->validate([
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
         $file = $request->file('img');
         $name = $user->name;
         $filename = $file->hashName();
@@ -106,5 +112,39 @@ class UserController extends Controller
             ->withProperties($request->all())
             ->log('User updated successfully');
         return response()->json(['message' => 'image updated succesfully !'], 200);
+    }
+
+    public function image(User $user, Request $request)
+    {
+
+        $request->validate([
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $file = $request->file('img');
+        if ($user->image) {
+            $image = $user->image;
+            $image = explode('/', $image);
+            $image = end($image);
+            Storage::disk('Users')->delete($user->name . '/' . 'Avatar' . $image);
+        }
+        if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $name = $user->name;
+            $filename = $file->hashName();
+            $path = $name . '/' . 'Avatar' . $filename;
+            $image = Image::make($file)->fit(256, 256)->encode('jpg', 40);
+            Storage::disk('Users')->put($path, (string) $image);
+            $url = Storage::disk('Users')->url($path);
+            $request->merge(['image' => $url]);
+            $user->update($request->all());
+            activity('update image')
+                ->performedOn($user)
+                ->causedBy(Auth::user())
+                ->withProperties($request->all())
+                ->log('User updated successfully');
+            return response()->json(['message' => 'image updated succesfully !'], 200);
+        } else {
+            return response()->json(['message' => 'image not uploaded succesfully !'], 400);
+        }
     }
 }

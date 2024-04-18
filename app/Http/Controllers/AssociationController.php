@@ -45,6 +45,7 @@ class AssociationController extends Controller
         $user_id = $user->id;
         $request->merge(['association_id' => $association_id, 'id' => $user_id, 'position' => 'president', 'bio' => $association->description]);
         $association_agent = AssociationAgent::create($request->all());
+
         Mail::to($association->email)->send(new SendPassword($user->email, $password));
 
         return response()->json(['message' => 'association created succesfully', 'association' => $association], 201);
@@ -80,6 +81,15 @@ class AssociationController extends Controller
 
     public function updateCurrentAssociation(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
         $association = $this->getCurrentAssociation();
         $association->update($request->all());
 
@@ -87,11 +97,17 @@ class AssociationController extends Controller
     }
 
 
-    public function getCurrentAssociation()
+    public static function getCurrentAssociation()
     {
         $user = auth()->user();
         $user = AssociationAgent::where('id', $user->id)->first();
+        if (!$user) {
+            return response()->json(['message' => 'u are not an association agent'], 404);
+        }
         $association = Association::find($user->association_id);
+        if (!$association) {
+            return response()->json(['message' => 'u are not an association agent'], 404);
+        }
         return $association;
     }
 

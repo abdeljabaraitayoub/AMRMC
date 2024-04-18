@@ -17,9 +17,9 @@ class AssociationAgentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
-            'id' => \App\Models\User::factory(),
-            'association_id' => $this->faker->numberBetween(1, 10),
+            'id' => \App\Models\User::factory()->agent(),
+            // 'association_id' => $this->faker->numberBetween(1, 10),
+            'association_id' => 1,
             'position' => $this->faker->randomElement(['president', 'member']),
             'bio' => $this->faker->text,
         ];

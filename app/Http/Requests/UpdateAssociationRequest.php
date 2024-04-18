@@ -29,7 +29,6 @@ class UpdateAssociationRequest extends FormRequest
             'city' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
