@@ -82,13 +82,13 @@ class AssociationController extends Controller
     public function updateCurrentAssociation(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'name' => 'string|max:255',
+            'email' => 'email|max:255',
+            'phone' => 'string|max:255',
+            'country' => 'string|max:255',
+            'city' => 'string|max:255',
+            'address' => 'string|max:255',
+            'description' => 'string|max:666',
         ]);
         $association = $this->getCurrentAssociation();
         $association->update($request->all());

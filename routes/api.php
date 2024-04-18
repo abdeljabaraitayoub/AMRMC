@@ -36,6 +36,7 @@ Route::apiResource('agents', 'App\Http\Controllers\AssociationAgentController');
 
 Route::apiResource('users', 'App\Http\Controllers\UserController');
 Route::post('me/image', 'App\Http\Controllers\UserController@myimage');
+Route::put('me', 'App\Http\Controllers\UserController@myupdate');
 Route::post('image/{user}', 'App\Http\Controllers\UserController@image');
 
 

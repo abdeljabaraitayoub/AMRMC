@@ -32,6 +32,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'city' => 'required',
+            'address' => 'required',
+            'role' => 'required',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
         $file = $request->file('img');
         $name = $request->name;
         $filename = $file->hashName();
@@ -69,13 +80,23 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $request->validate([
+            'name' => 'string',
+            'email' => 'email',
+            'phone' => 'string',
+            'date_of_birth' => 'date',
+            'password' => 'string|min:8',
+            'city' => '',
+            'address' => '',
+            'role' => '',
+        ]);
         $user->update($request->all());
         activity('update User')
             ->performedOn($user)
             ->causedBy(Auth::user())
             ->withProperties($request->all())
             ->log('User updated successfully');
-        return response()->json(['message' => 'User updated successfully'], 200);
+        return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
     }
 
     /**
@@ -112,6 +133,29 @@ class UserController extends Controller
             ->withProperties($request->all())
             ->log('User updated successfully');
         return response()->json(['message' => 'image updated succesfully !'], 200);
+    }
+
+    public function myupdate(Request $request)
+    {
+        $user = Auth::user();
+        $request->validate([
+            'name' => 'string',
+            'email' => 'email',
+            'phone' => 'string',
+            'date_of_birth' => 'date',
+            'password' => 'string|min:8',
+            'city' => '',
+            'address' => '',
+            'role' => '',
+        ]);
+        $user = User::find($user->id);
+        $user->update($request->all());
+        activity('update User')
+            ->performedOn($user)
+            ->causedBy(Auth::user())
+            ->withProperties($request->all())
+            ->log('User updated successfully');
+        return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
     }
 
     public function image(User $user, Request $request)
