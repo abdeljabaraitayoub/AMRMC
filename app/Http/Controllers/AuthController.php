@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssociationAgent;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -11,11 +12,15 @@ class AuthController extends Controller
 
     public function login(request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        $user = new User;
         $credentials = request(['email', 'password']);
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Credenials are wrong !'], 422);
         }
-        $user = new User;
         activity('login')
             ->performedOn($user)
             ->causedBy(Auth::user())
@@ -25,6 +30,18 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|string',
+            'city' => 'required|string',
+            'address' => 'required|string',
+            // 'date_of_birth' => 'required|date',
+            'country' => 'required|string',
+        ]);
+
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
@@ -93,10 +110,19 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+
+        if (auth()->user()->role == 'association_agent') {
+            $role = AssociationAgent::find(auth()->user()->id)->position;
+        } else {
+            $role = auth()->user()->role;
+        }
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'message' => 'User logged in successfully',
+            'user' => auth()->user(),
+            'role' => $role,
         ]);
     }
 }

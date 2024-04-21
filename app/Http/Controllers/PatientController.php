@@ -102,4 +102,30 @@ class PatientController extends Controller
         $association = Association::find($user->association_id);
         return $association;
     }
+
+    public function exportpatientsCSV()
+    {
+        $headers = [
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',   'Content-type'        => 'text/csv',   'Content-Disposition' => 'attachment; filename=galleries.csv',   'Expires'             => '0',   'Pragma'              => 'public'
+        ];
+        $patients = Patient::join('users', 'users.id', '=', 'patients.id')
+            ->leftjoin('associations', 'associations.id', '=', 'patients.association_id')
+            ->leftjoin('diseases', 'diseases.id', '=', 'patients.disease_id')
+            ->select('patients.*', 'users.*', 'users.name as user_name', 'associations.name as association_name', 'diseases.name as disease_name', 'diseases.id as disease')
+            ->get();
+        $columns = array('id', 'name', 'email', 'phone', 'role', 'city', 'address', 'date_of_birth', 'country', 'medical_record_number', 'medical_history', 'association_id', 'disease_id', 'created_at', 'updated_at');
+        $callback = function () use ($patients, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+            foreach ($patients as $patient) {
+                $row = [];
+                foreach ($columns as $column) {
+                    $row[] = $patient->$column;
+                }
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
 }

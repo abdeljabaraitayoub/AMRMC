@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +15,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use SoftDeletes;
     use HasApiTokens, HasFactory, Notifiable;
-
+    use Searchable;
     /**
      * The attributes that are mass assignable.
      *
@@ -61,4 +62,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * Search to get all users from Elasticsearch.
+     *
+     * @return array
+     */
 }
