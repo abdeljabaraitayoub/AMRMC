@@ -1,16 +1,10 @@
 <script>
 import api from '@/stores/api'
-import { searchstore } from '@/stores/search'
-
 export default {
   components: {},
-  setup() {
-    const search = searchstore().value
-    return { search }
-  },
   data() {
     return {
-      entity: 'activities',
+      entity: 'activity/association',
       packages: [],
       page: 1,
       pages: 0
@@ -19,9 +13,6 @@ export default {
   watch: {
     page() {
       this.fetchdata()
-    },
-    search() {
-      this.fetchdata()
     }
   },
   mounted() {
@@ -29,7 +20,7 @@ export default {
   },
   methods: {
     fetchdata() {
-      api.get(`/${this.entity}?page=${this.page}&search=${this.search}`).then((response) => {
+      api.get(`/${this.entity}?page=${this.page}`).then((response) => {
         this.packages = response.data.data
         this.pages = response.data.meta.last_page
       })
@@ -86,8 +77,8 @@ export default {
         <tbody>
           <tr v-for="(item, index) in packages" :key="index">
             <td class="py-5 px-4 pl-9 xl:pl-11">
-              <h5 class="font-medium text-black dark:text-white">{{ item.causer.name }}</h5>
-              <p class="text-sm">{{ item.causer.email }}</p>
+              <h5 class="font-medium text-black dark:text-white">{{ item.name }}</h5>
+              <p class="text-sm">{{ item.email }}</p>
             </td>
             <td class="py-5 px-4">
               <p class="text-black dark:text-white">{{ item.log_name }}</p>

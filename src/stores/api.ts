@@ -31,16 +31,27 @@ api.interceptors.response.use(
     return response
   },
   error => {
+  
     if (error.response.status === 422) {
       useToast().error(error.response.data.message);
+    }else if(error.response.status === 404){
+      useToast().error('Resource not found');
+    }
+    else if(error.response.status === 500){
+      useToast().error('Server error');
+    }
+    else if(error.response.status === 401){
+      // useToast().error('Unauthorized');
+      localStorage.removeItem('token');
+      router.push('/signin');
+    }
+    else if(error.response.status === 403){
+      useToast().error('Forbidden');
     }
     else{
       useToast().error('An error occurred');
     }
-
-    if (error.response.status === 401 || error.response.status === 403) {
-      router.push("/login")
-    }
+   
     return Promise.reject(error)
   },
 )
@@ -48,8 +59,9 @@ api.interceptors.response.use(
 api.interceptors.request.use(
   config => {
 
-    config.headers.Authorization ="Bearer " +import.meta.env.VITE_JWT_TOKEN
+    // config.headers.Authorization ="Bearer " +import.meta.env.VITE_JWT_TOKEN
     if (localStorage.getItem("token")) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`
     //  console.log('Token:', localStorage.getItem('token'))
       // config.headers.Authorization = `${localStorage.getItem("token")}`
     }

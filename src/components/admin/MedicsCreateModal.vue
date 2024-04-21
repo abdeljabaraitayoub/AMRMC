@@ -37,7 +37,7 @@ export default {
       formData.append('manufacturer', this.modalStore.data.manufacturer)
       formData.append('price', this.modalStore.data.price)
       formData.append('description', this.modalStore.data.description)
-      formData.append('file', this.modalStore.data.file)
+      formData.append('file', this.modalStore.data.image)
       api
         .post(this.entity, formData, {
           headers: {
@@ -180,13 +180,9 @@ export default {
               >
               <input
                 v-model="modalStore.data.price"
-                class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                min="0.00"
-                max="10000.00"
-                step="0.01"
-                name="Username"
-                id="Username"
-                placeholder="15.00"
+                class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                type="number"
+                placeholder="10"
               />
             </div>
             <!-- Bio Section -->

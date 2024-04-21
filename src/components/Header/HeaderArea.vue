@@ -1,11 +1,24 @@
-<script setup lang="ts">
+<script>
 import { useSidebarStore } from '@/stores/sidebar'
 import DarkModeSwitcher from './DarkModeSwitcher.vue'
 import DropdownMessage from './DropdownMessage.vue'
 import DropdownNotification from './DropdownNotification.vue'
 import DropdownUser from './DropdownUser.vue'
+import { searchstore } from '@/stores/search'
 
-const { isSidebarOpen, toggleSidebar } = useSidebarStore()
+export default {
+  components: {
+    DarkModeSwitcher,
+    DropdownMessage,
+    DropdownNotification,
+    DropdownUser
+  },
+  setup() {
+    const { toggleSidebar, isSidebarOpen } = useSidebarStore()
+    const search = searchstore()
+    return { toggleSidebar, isSidebarOpen, search }
+  }
+}
 </script>
 
 <template>
@@ -84,6 +97,7 @@ const { isSidebarOpen, toggleSidebar } = useSidebarStore()
             </button>
 
             <input
+              v-model="search.value"
               type="text"
               placeholder="Type to search..."
               class="w-full xl:w-125 bg-transparent pr-4 pl-9 focus:outline-none"

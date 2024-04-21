@@ -1,12 +1,12 @@
 <script>
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
 import DefaultLayout from '@/layouts/DefaultAdminLayout.vue'
-import ActivitiesTables from '@/components/admin/ActivitiesTable.vue'
+import ActivitiesTable from '@/components/Association/ActivitiesTable.vue'
 export default {
   components: {
     BreadcrumbDefault,
     DefaultLayout,
-    ActivitiesTables
+    ActivitiesTable
   },
   data() {
     return {
@@ -20,7 +20,7 @@ export default {
   <DefaultLayout>
     <div class="mx-auto max-w-7xl">
       <BreadcrumbDefault :pageTitle="pageTitle" />
-      <ActivitiesTables />
+      <ActivitiesTable />
     </div>
   </DefaultLayout>
 </template>

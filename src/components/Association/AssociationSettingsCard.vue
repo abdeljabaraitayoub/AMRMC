@@ -59,7 +59,7 @@ export default {
         class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
       >
         <div class="border-b border-stroke py-4 px-7 dark:border-strokedark">
-          <h3 class="font-medium text-black dark:text-white">Personal Information</h3>
+          <h3 class="font-medium text-black dark:text-white">General Information</h3>
         </div>
         <div class="p-7">
           <form>
@@ -262,7 +262,7 @@ AUXILIAIRES"
         class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
       >
         <div class="border-b border-stroke py-4 px-7 dark:border-strokedark">
-          <h3 class="font-medium text-black dark:text-white">Your Photo</h3>
+          <h3 class="font-medium text-black dark:text-white">Association image</h3>
         </div>
         <div class="p-7">
           <form>
@@ -272,7 +272,9 @@ AUXILIAIRES"
                 <img class="h-14 w-14 rounded-full" :src="data.image" :alt="data.name + ' image'" />
               </div>
               <div>
-                <span class="mb-1.5 font-medium text-black dark:text-white">Edit your photo</span>
+                <span class="mb-1.5 font-medium text-black dark:text-white"
+                  >Edit Association image</span
+                >
                 <span class="flex gap-2.5">
                   <button class="text-sm font-medium hover:text-primary">Delete</button>
                 </span>

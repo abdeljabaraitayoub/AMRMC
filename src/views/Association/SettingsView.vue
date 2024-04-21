@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
 import SettingsCard from '@/components/Association/AssociationSettingsCard.vue'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import DefaultLayout from '@/layouts/DefaultAdminLayout.vue'
 
 const pageTitle = ref('Association Settings')
 </script>

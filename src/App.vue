@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 
 import { useModalStore } from './stores/modal'
-const modalStore = useModalStore().show
+import { searchstore } from '@/stores/search'
 </script>
 
 <template>

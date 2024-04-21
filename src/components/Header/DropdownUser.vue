@@ -1,8 +1,13 @@
 <script>
 import { onClickOutside } from '@vueuse/core'
 import api from '@/stores/api'
+import { useAuthStore } from '@/stores/auth'
 
 export default {
+  setup() {
+    const Auth = useAuthStore()
+    return { Auth }
+  },
   data() {
     return {
       dropdownOpen: false,
@@ -12,6 +17,9 @@ export default {
   methods: {
     closeDropdown() {
       this.dropdownOpen = false
+    },
+    logout() {
+      this.Auth.logout()
     }
   },
   mounted() {
@@ -116,7 +124,7 @@ export default {
         </li>
         <li>
           <router-link
-            to="/pages/settings"
+            to="/settings"
             class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
           >
             <svg
@@ -141,6 +149,7 @@ export default {
         </li>
       </ul>
       <button
+        @click="logout"
         class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
       >
         <svg

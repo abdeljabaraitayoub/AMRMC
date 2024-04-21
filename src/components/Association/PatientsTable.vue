@@ -1,15 +1,26 @@
 <script>
 import api from '@/stores/api'
-import UserCreateModal from '@/components/admin/UserCreateModal.vue'
+import UserCreateModal from '@/components/Association/PatientModal.vue'
 import { useModalStore } from '@/stores/modal'
+import { getCurrentInstance, watch } from 'vue'
 export default {
   components: {
     UserCreateModal
   },
   setup() {
+    const store = useModalStore()
+    const instance = getCurrentInstance()
     const setModal = useModalStore().setModal
     const setData = useModalStore().setData
     const openModal = useModalStore().openModal
+    watch(
+      () => store.updated,
+      () => {
+        if (instance && instance.proxy) {
+          instance.proxy.fetchdata()
+        }
+      }
+    )
     return { setModal, setData, openModal }
   },
   data() {

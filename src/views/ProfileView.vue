@@ -1,14 +1,12 @@
 <script>
 import { ref } from 'vue'
 import ProfileCard from '@/components/ProfileCard.vue'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import HeaderArea from '@/components/Header/HeaderArea.vue'
+import DefaultLayout from '@/layouts/DefaultAdminLayout.vue'
 // import SidebarArea from '@/components/Sidebar/SidebarArea.vue'
 export default {
   components: {
     ProfileCard,
-    DefaultLayout,
-    HeaderArea
+    DefaultLayout
   },
   mounted() {},
   data() {
@@ -25,21 +23,11 @@ const pageTitle = ref('Profile')
 </script>
 
 <template>
-  <DefaultLayout v-show="false"> </DefaultLayout>
-  <!-- ===== Content Area Start ===== -->
-  <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-    <!-- ===== Header Start ===== -->
-    <HeaderArea />
-    <!-- ===== Header End ===== -->
-
+  <DefaultLayout>
+    <!-- ===== Content Area Start ===== -->
     <!-- ===== Main Content Start ===== -->
     <main>
-      <div class="mx-auto max-w-screen-2xl py-10">
-        <div class="mx-auto">
-          <ProfileCard />
-        </div>
-      </div>
+      <ProfileCard />
     </main>
-    <!-- ===== Main Content End ===== -->
-  </div>
+  </DefaultLayout>
 </template>

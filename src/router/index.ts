@@ -14,8 +14,8 @@ import ButtonsView from '@/views/UiElements/ButtonsView.vue'
 
 //admin route
 import UsersView from '@/views/Admin/UsersView.vue'
+import activities from '@/views/Admin/ActivitiesView.vue'
 import AssociationsView from '@/views/Admin/AssociationsView.vue'
-import ActivitiesView from '@/views/Admin/ActivitiesView.vue'
 import DiseaseView from '@/views/Admin/DiseaseView.vue'
 import MedicsView from '@/views/Admin/MedicsView.vue'
 import BackupView from '@/views/Admin/BackupView.vue'
@@ -25,6 +25,7 @@ import DashboardView from '@/views/Admin/DashboardView.vue'
 import PatientView from '@/views/Association/PatientView.vue'
 import AgentsView from '@/views/Association/AgentsView.vue'
 import AssociationSettingsView from '@/views/Association/SettingsView.vue'
+import AssociationActivitiesView from '@/views/Association/ActivitiesView.vue'
 
 
 const routes = [
@@ -69,7 +70,7 @@ const routes = [
     }
   },
   {
-    path: '/pages/settings',
+    path: '/settings',
     name: 'settings',
     component: SettingsView,
     meta: {
@@ -101,7 +102,7 @@ const routes = [
     }
   },
   {
-    path: '/auth/signin',
+    path: '/signin',
     name: 'signin',
     component: SigninView,
     meta: {
@@ -109,7 +110,7 @@ const routes = [
     }
   },
   {
-    path: '/auth/signup',
+    path: '/signup',
     name: 'signup',
     component: SignupView,
     meta: {
@@ -135,10 +136,10 @@ const routes = [
   },
   {
     path: '/activities',
-    name: 'ActivitiesView',
-    component: ActivitiesView,
+    name: 'activities',
+    component: activities,
     meta: {
-      title: 'Activities'
+      title: 'activities'
     }
   },
   {
@@ -190,7 +191,7 @@ const routes = [
     name: 'AgentsView',
     component: AgentsView,
     meta: {
-      title: 'Agents'
+      title: 'Association | Agents'
     }
   },
   {
@@ -199,6 +200,15 @@ const routes = [
     component: AssociationSettingsView,
     meta: {
       title: 'Association | Settings'
+    }
+  }
+  ,
+  {
+    path: '/association/activities',
+    name: 'ActivitiesView',
+    component: AssociationActivitiesView,
+    meta: {
+      title: 'Association | Activities'
     }
   }
 ]
