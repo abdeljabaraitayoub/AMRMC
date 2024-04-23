@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Association;
+use App\Models\AssociationAgent;
 use App\Models\Disease;
 use App\Models\Medics;
 use App\Models\Patient;
@@ -123,19 +124,31 @@ class StatsController extends Controller
         return response()->json($associations);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Patient $patient)
+    public function monthlyRegistrationsAssociation()
     {
-        //
-    }
+        $user = auth()->user();
+        $user = AssociationAgent::where('id', $user->id);
+        if ($user->count() == 0) {
+            return response()->json(['message' => 'You are not associated with any association'], 400);
+        }
+        $associationId = $user->first()->association_id;
+        $patients = User::join('patients', 'users.id', '=', 'patients.id')->where('patients.association_id', $associationId)
+            ->select(DB::raw("EXTRACT(MONTH FROM created_at) as month"), DB::raw('COUNT(*) as count'))
+            ->whereYear('created_at', date('Y'))
+            ->groupBy('month')
+            ->get()
+            ->pluck('count');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Patient $patient)
-    {
-        //
+        $users = User::join('association_agents', 'users.id', '=', "association_agents.id")->where('association_id', $associationId)
+            ->select(DB::raw("EXTRACT(MONTH FROM created_at) as month"), DB::raw('COUNT(*) as count'))
+            ->whereYear('created_at', date('Y'))
+            ->groupBy('month')
+            ->get()
+            ->pluck('count');
+
+        return response()->json([
+            'patients' => $patients,
+            'users' => $users
+        ]);
     }
 }

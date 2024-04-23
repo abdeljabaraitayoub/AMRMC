@@ -20,16 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group([
-    'middleware' => 'api',
-], function ($router) {
 
-    Route::post('login', 'App\Http\Controllers\AuthController@login');
-    Route::post('register', 'App\Http\Controllers\AuthController@register');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::get('logout', 'App\Http\Controllers\AuthController@logout');
-    Route::get('me', 'App\Http\Controllers\AuthController@me');
-});
+Route::post('login', 'App\Http\Controllers\AuthController@login');
+Route::post('register', 'App\Http\Controllers\AuthController@register');
+Route::get('refresh', 'App\Http\Controllers\AuthController@refresh');
+Route::get('logout', 'App\Http\Controllers\AuthController@logout');
+Route::get('me', 'App\Http\Controllers\AuthController@me');
+Route::post('generateResetToken', 'App\Http\Controllers\AuthController@generateResetToken');
+
 Route::middleware('role:admin')->group(function () {
 
     Route::apiResource('associations', 'App\Http\Controllers\AssociationController');
@@ -58,6 +56,8 @@ Route::middleware('role:admin')->group(function () {
     Route::get('stats/roles', 'App\Http\Controllers\StatsController@roles');
     Route::get('stats', 'App\Http\Controllers\StatsController@counts');
     Route::get('stats/associations', 'App\Http\Controllers\StatsController@associations');
+    Route::apiResource('openData', 'App\Http\Controllers\OpenDataController');
+    Route::put('openData/{openData}/accept', 'App\Http\Controllers\OpenDataController@accept');
 
 
     //association agents routes
@@ -66,6 +66,8 @@ Route::middleware('role:admin')->group(function () {
     Route::put('association/current', 'App\Http\Controllers\AssociationController@updateCurrentAssociation');
     Route::get('association/current', 'App\Http\Controllers\AssociationController@getCurrentAssociation');
     Route::post('association/image', 'App\Http\Controllers\AssociationController@image');
-
     Route::get('activity/association', 'App\Http\Controllers\ActivityLogController@getactivityperassociation');
+    Route::get('stats/association/monthly-registrations', 'App\Http\Controllers\StatsController@monthlyRegistrationsAssociation');
 });
+
+Route::get('openData/export/{model}/{format}', 'App\Http\Controllers\OpenDataController@export')->name('openData.export');

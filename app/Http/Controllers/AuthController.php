@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPassword;
 use App\Models\AssociationAgent;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -82,12 +86,13 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        auth()->logout();
         $user = new User;
         activity('logout')
             ->performedOn($user)
             ->causedBy(Auth::user())
             ->log('User logged out successfully');
-        auth()->logout();
+
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -124,5 +129,21 @@ class AuthController extends Controller
             'user' => auth()->user(),
             'role' => $role,
         ]);
+    }
+
+
+    public function generateResetToken(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email:exists:users,email',
+        ]);
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        $ResetToken = Str::random(7);
+        Cache::put($user->id, $ResetToken, 5);
+        Mail::to($user->email)->send(new ResetPassword($ResetToken, $user));
+        return response()->json(['message' => 'Please verify your Email !', 'key' => $ResetToken]);
     }
 }

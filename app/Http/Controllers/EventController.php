@@ -23,9 +23,11 @@ class EventController extends Controller
         foreach ($events as $event) {
             $dateKey = Carbon::parse($event->date)->format('Y-m-d');
             $formattedEvents[$dateKey] = [
-                'name' => $event->title,
+                'id' => $event->id,
+                'title' => $event->title,
+                'description' => $event->description,
                 'startDate' => Carbon::parse($event->date)->format('j M'),
-                'endDate' => Carbon::parse($event->endDate)->format('j M')
+                'endDate' => Carbon::parse($event->endDate)->format('j M'),
             ];
         }
 
@@ -39,7 +41,11 @@ class EventController extends Controller
         $user = auth()->user();
         $request->merge(['User_id' => $user->id]);
         $event = Event::create($request->all());
-        return $event;
+        activity('create event')
+            ->performedOn($event)
+            ->causedBy($user)
+            ->log('Event created');
+        return response()->json(['message' => 'Event created', 'event' => $event], 201);
     }
 
     /**
@@ -59,7 +65,11 @@ class EventController extends Controller
         $user = auth()->user();
         $request->merge(['User_id' => $user->id]);
         $event->update($request->all());
-        return $event;
+        activity('update event')
+            ->performedOn($event)
+            ->causedBy($user)
+            ->log('Event updated');
+        return response()->json(['message' => 'Event updated', 'event' => $event]);
 
         //
     }
@@ -70,6 +80,10 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         $event->delete();
+        activity()
+            ->performedOn($event)
+            ->causedBy(auth()->user())
+            ->log('Event deleted');
         return response()->json(['message' => 'Event deleted']);
     }
 }

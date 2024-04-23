@@ -17,5 +17,6 @@ class Event extends Model
         'title',
         'description',
         'date',
+        'endDate'
     ];
 }
