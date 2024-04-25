@@ -16,7 +16,11 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('token', response.data.access_token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         localStorage.setItem('role', response.data.role);
-        router.push("/");
+        if(response.data.role=="admin"){
+          router.push("/");
+        }else{
+          router.push("/calendar")
+        }
       }
       );
    },
@@ -26,8 +30,12 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       api.get('/logout').then(() => {
-      this.clearToken();
-      router.push("/signin");
+        this.clearToken();
+        router.push("/signin");
+      }
+      ).catch(() => {
+        this.clearToken();
+        router.push("/signin");
       }
       );
     },

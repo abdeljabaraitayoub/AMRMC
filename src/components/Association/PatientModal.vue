@@ -1,8 +1,12 @@
 <script>
 import api from '@/stores/api'
 import { useModalStore } from '@/stores/modal'
+import Select2 from 'v-select2-component'
 
 export default {
+  components() {
+    Select2
+  },
   setup() {
     const modalStore = useModalStore()
 

@@ -5,6 +5,8 @@ import DropdownMessage from './DropdownMessage.vue'
 import DropdownNotification from './DropdownNotification.vue'
 import DropdownUser from './DropdownUser.vue'
 import { searchstore } from '@/stores/search'
+import { watch } from 'vue'
+import api from '@/stores/api'
 
 export default {
   components: {
@@ -16,7 +18,29 @@ export default {
   setup() {
     const { toggleSidebar, isSidebarOpen } = useSidebarStore()
     const search = searchstore()
-    return { toggleSidebar, isSidebarOpen, search }
+    let search2 = search.value
+    function hello() {
+      api
+        .get('/')
+        .then((res) => {
+          // alert('Hello')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    watch(
+      () => search.value,
+      () => {
+        search2 = search.value
+        // alert(search.value)
+        // hello()
+      }
+    )
+    return { toggleSidebar, isSidebarOpen, search, search2 }
+  },
+  data() {
+    return {}
   }
 }
 </script>

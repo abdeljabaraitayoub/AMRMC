@@ -255,12 +255,15 @@ export default {
                   v-model="modalStore.data.role"
                   class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                 >
-                  <option disabled="" value="">Select Country</option>
-                  <option class="text-body dark:text-bodydark" value="doctor">doctor</option>
-                  <option class="text-body dark:text-bodydark" value="pharmacist">
+                  <option disabled="" class="text-body dark:text-bodydark" value="doctor">
+                    doctor
+                  </option>
+                  <option disabled="" class="text-body dark:text-bodydark" value="pharmacist">
                     pharmacist
                   </option>
-                  <option class="text-body dark:text-bodydark" value="analyst">analyst</option>
+                  <option class="text-body dark:text-bodydark" value="analyst" selected>
+                    analyst
+                  </option>
                 </select>
               </div>
             </div>

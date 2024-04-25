@@ -103,11 +103,7 @@ AUXILIAIRES"
             </div>
             <!-- Email Address Section -->
             <div class="mb-5.5">
-              <label
-                class="mb-3 block text-sm font-medium text-black dark:text-white"
-                for="emailAddress"
-                >email</label
-              >
+              <label class="mb-3 block text-sm font-medium text-black dark:text-white">email</label>
 
               <div class="relative z-20 bg-white dark:bg-form-input">
                 <span class="absolute top-1/2 left-4 z-30 -translate-y-1/2"
@@ -117,65 +113,60 @@ AUXILIAIRES"
                   v-model="data.email"
                   class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                   type="text"
-                  name="emailAddress"
-                  id="emailAddress"
                   placeholder="jhondoe@gmail.com"
                 />
               </div>
             </div>
             <div class="mb-5.5">
-              <label
-                class="mb-3 block text-sm font-medium text-black dark:text-white"
-                for="Username"
+              <label class="mb-3 block text-sm font-medium text-black dark:text-white"
                 >address</label
               ><input
                 v-model="data.address"
                 class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                 type="text"
-                name="Username"
-                id="Username"
                 placeholder="13A Dama Road, Bauchi"
               />
             </div>
             <div class="mb-5.5">
-              <label
-                class="mb-3 block text-sm font-medium text-black dark:text-white"
-                for="Username"
-                >city</label
-              >
+              <label class="mb-3 block text-sm font-medium text-black dark:text-white">city</label>
               <input
                 v-model="data.city"
                 class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                name="Username"
-                id="Username"
                 placeholder="CasaBlanca"
               />
             </div>
             <div class="mb-5.5">
-              <label
-                class="mb-3 block text-sm font-medium text-black dark:text-white"
-                for="Username"
+              <label class="mb-3 block text-sm font-medium text-black dark:text-white"
                 >country</label
               >
               <input
                 v-model="data.country"
                 class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                name="Username"
-                id="Username"
                 placeholder="Morocco"
+                value="Morocco"
+              />
+            </div>
+            <div class="mb-5.5">
+              <label class="mb-3 block text-sm font-medium text-black dark:text-white"
+                >password</label
+              >
+              <input
+                type="password"
+                v-model="data.password"
+                class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                placeholder="************"
               />
             </div>
             <div class="mb-5.5">
               <label
                 class="mb-3 block text-sm font-medium text-black dark:text-white"
                 for="Username"
-                >password</label
-              >
+                >Verify password
+              </label>
               <input
-                v-model="data.password"
+                v-model="data.password_confirmation"
+                type="password"
                 class="w-full rounded border border-stroke bg-gray py-3 px-4.5 font-normal text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                name="Username"
-                id="Username"
                 placeholder="************"
               />
             </div>

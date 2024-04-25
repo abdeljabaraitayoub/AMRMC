@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Select2 from 'v-select2-component'
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 

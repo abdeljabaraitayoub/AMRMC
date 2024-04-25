@@ -28,6 +28,13 @@ api.interceptors.response.use(
         useToast().warning(response.data.message);
       }
     }
+    console.log('Response:', response.headers)
+    if(response.headers.token){
+      console.log('token:', response.headers)
+      localStorage.setItem('token', response.headers.token);
+      alert(response.headers.token)
+      // localStorage.setItem('token', response.headers.authorization);
+    }
     return response
   },
   error => {
@@ -42,10 +49,11 @@ api.interceptors.response.use(
     }
     else if(error.response.status === 401){
       // useToast().error('Unauthorized');
-      localStorage.removeItem('token');
+      // localStorage.removeItem('token');
       router.push('/signin');
     }
     else if(error.response.status === 403){
+      
       useToast().error('Forbidden');
     }
     else{
@@ -60,6 +68,7 @@ api.interceptors.request.use(
   config => {
 
     // config.headers.Authorization ="Bearer " +import.meta.env.VITE_JWT_TOKEN
+    // config.headers.Authorization ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMC4wLjAuMC9hcGkvbG9naW4iLCJpYXQiOjE3MTM2MTk4NzIsIm5iZiI6MTcxMzYxOTg3MiwiZXhwIjoxNzEzNjI3MiwianRpIjoiMlBpNndzYXNzc2Fzd3NnMHNhRlZWb09SM0hCaSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.X6OTHn1SJ6MA-rP2DdJtw2bskQBNV1sUE8Kp6fQJP_8"
     if (localStorage.getItem("token")) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`
     //  console.log('Token:', localStorage.getItem('token'))
